@@ -1,28 +1,29 @@
 // Функция для проверки длины строки
-const checkLengthStr = (str, maxLength) => str.length <= maxLength;
+const checkLengthString = (str, maxLength) => str.length <= maxLength;
 
 // Функция для проверки, является ли строка палиндромом
-const toFormatStr = (param) => String(param).replaceAll(' ', '').toLowerCase();
+const formatString = (str) => String(str).replaceAll(' ', '').toLowerCase();
 
-const isPalindrom1 = (param) => {
-  const str = toFormatStr(param);
+const isPalindrom1 = (str) => {
+  str = formatString(str);
 
   return str === str.split('').reverse().join('');
 };
 
-const isPalindrom2 = (param) => {
-  const str = toFormatStr(param);
+const isPalindrom2 = (str) => {
+  str = formatString(str);
 
   let reverseStr = '';
   for (let i = str.length - 1; i >= 0; --i) {
     reverseStr += str[i];
   }
 
-  return param === reverseStr;
+  return str === reverseStr;
 };
 
-const isPalindrom3 = (param) => {
-  const str = toFormatStr(param);
+const isPalindrom3 = (str) => {
+  str = formatString(str);
+
   let startCh = 0;
   let endCh = str.length - 1;
   let result = true;
@@ -36,15 +37,5 @@ const isPalindrom3 = (param) => {
 
 // Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа
 
-const getNumFromStr = (param) => {
-  let chrNum = '';
-  const str = param.toString();
-
-  for (let i = 0; i < str.length; ++i) {
-    if ('0123456789'.includes(str[i])) {
-      chrNum += str[i];
-    }
-  }
-
-  return parseInt(chrNum);
-};
+const getNumberFromString = (str) =>
+  Number(str.toString().match(/\d/g)?.join(''));
