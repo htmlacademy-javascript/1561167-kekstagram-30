@@ -1,4 +1,8 @@
 const QUANTITY_PHOTOS = 25;
+const NUMBER_OF_COMMENTS = 30;
+const UPPER_LIMIT_LIKES = 15;
+const LOWER_LIMIT_LIKES = 200;
+
 const messages = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -28,37 +32,17 @@ const authors = [
 const getRandomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-// Генератор произвольных уникальное целых чисел из диапазона min..max
-// пока есть числа, потом null
-const generateRandomUniqueNumber = (min, max) => {
-  const array = Array.from(
-    { length: max - min + 1 },
-    (_, index) => min + index
-  );
-
-  return () => {
-    const index = getRandomNumber(0, array.length - 1);
-
-    if (array.length) {
-      return array.splice(index, 1)[0];
-    }
-
-    return null;
-  };
-};
-
 // Возвращант произвольный элемент массива
 const getRandomArrayElement = (array) =>
   array[getRandomNumber(0, array.length - 1)];
 
-const getCommentID = generateRandomUniqueNumber(0, 1000);
-
-const createComments = () => {
+const createComments = (_, index) => {
   const message = getRandomArrayElement(messages);
   const name = getRandomArrayElement(authors);
+  ++index;
 
   return {
-    id: getCommentID(),
+    id: index,
     avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
     message,
     name,
@@ -67,7 +51,7 @@ const createComments = () => {
 
 const createPhoto = (_, index) => {
   const comments = Array.from(
-    { length: getRandomNumber(0, 30) },
+    { length: getRandomNumber(0, NUMBER_OF_COMMENTS) },
     createComments
   );
 
@@ -78,7 +62,7 @@ const createPhoto = (_, index) => {
     url: `photos/${index}.jpg`,
     description:
       'Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Рыбного свой сбить жаренные толку!',
-    likes: getRandomNumber(15, 200),
+    likes: getRandomNumber(UPPER_LIMIT_LIKES, LOWER_LIMIT_LIKES),
     comments,
   };
 };
