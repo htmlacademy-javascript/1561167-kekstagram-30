@@ -1,3 +1,3 @@
-import { createPhotos } from './data.js';
+import { renderingThumbnails } from './rendering-thumbnails.js';
 
-const arrayPhotos = createPhotos();
+renderingThumbnails();
