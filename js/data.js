@@ -2,8 +2,8 @@ import { getRandomNumber, getRandomArrayElement } from './util.js';
 
 const QUANTITY_PHOTOS = 25;
 const NUMBER_OF_COMMENTS = 30;
-const UPPER_LIMIT_LIKES = 15;
-const LOWER_LIMIT_LIKES = 200;
+const UPPER_LIMIT_LIKES = 200;
+const LOWER_LIMIT_LIKES = 15;
 
 const messages = [
   'Всё отлично!',
@@ -56,7 +56,7 @@ const createPhoto = (_, index) => {
     url: `photos/${index}.jpg`,
     description:
       'Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Рыбного свой сбить жаренные толку!',
-    likes: getRandomNumber(UPPER_LIMIT_LIKES, LOWER_LIMIT_LIKES),
+    likes: getRandomNumber(LOWER_LIMIT_LIKES, UPPER_LIMIT_LIKES),
     comments,
   };
 };
