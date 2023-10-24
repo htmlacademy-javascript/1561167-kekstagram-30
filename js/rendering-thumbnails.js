@@ -1,13 +1,12 @@
-import { createPhotos } from './data.js';
+const containerPhotos = document.querySelector('.pictures');
 
-const renderingThumbnails = () => {
+const renderingThumbnails = (photos) => {
   const templatePhoto = document
     .querySelector('#picture')
     ?.content.querySelector('.picture');
-  const containerPhotos = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
-  createPhotos().forEach(({ url, description, likes, comments }) => {
+  photos.forEach(({ url, description, likes, comments }) => {
     const photo = templatePhoto.cloneNode(true);
     const pictureImg = photo.querySelector('.picture__img');
 
@@ -21,4 +20,4 @@ const renderingThumbnails = () => {
   containerPhotos.appendChild(fragment);
 };
 
-export { renderingThumbnails };
+export { renderingThumbnails, containerPhotos };

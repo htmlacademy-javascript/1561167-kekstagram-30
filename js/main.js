@@ -1,3 +1,4 @@
-import { renderingThumbnails } from './rendering-thumbnails.js';
+import { createPhotos } from './data.js';
+import { gallery } from './gallery.js';
 
-renderingThumbnails();
+gallery(createPhotos());
