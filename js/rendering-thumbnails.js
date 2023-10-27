@@ -1,9 +1,11 @@
 const containerPhotos = document.querySelector('.pictures');
 
+// TODO: сделать функцию, которая будет создавать только одну фотку
 const renderingThumbnails = (photos) => {
   const templatePhoto = document
     .querySelector('#picture')
     ?.content.querySelector('.picture');
+  // TODO: использовать append вместо фрагмента
   const fragment = document.createDocumentFragment();
 
   photos.forEach(({ url, description, likes, comments }) => {

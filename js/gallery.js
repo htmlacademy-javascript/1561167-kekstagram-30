@@ -1,4 +1,4 @@
-import { isPushEscape } from './util.js';
+import { isEscapeDown } from './util.js';
 import {
   containerPhotos,
   renderingThumbnails,
@@ -6,27 +6,22 @@ import {
 import {
   showFullSizeMode,
   closeFullSizeMode,
-  fullSizeModeCancelElement,
+  fullSizeModeCloseElement,
 } from './show-full-size-mode.js';
 
-const removeHandlers = () => {
-  document.removeEventListener('keydown', onFullSizeModePushEscape);
-  fullSizeModeCancelElement.removeEventListener('click', onFullSizeModeCancel);
-};
 function onFullSizeModePushEscape(evt) {
-  if (!isPushEscape(evt)) {
+  if (!isEscapeDown(evt)) {
     return;
   }
 
   evt.preventDefault();
-  closeFullSizeMode();
-  removeHandlers();
+  onFullSizeModeClose();
 }
-function onFullSizeModeCancel() {
+function onFullSizeModeClose() {
   closeFullSizeMode();
-  removeHandlers();
+  document.removeEventListener('keydown', onFullSizeModePushEscape);
 }
-const gallery = (photos) => {
+const renderingGallery = (photos) => {
   renderingThumbnails(photos);
   const thumbnails = containerPhotos.querySelectorAll('.picture');
 
@@ -34,11 +29,13 @@ const gallery = (photos) => {
     const targetPicture = evt.target.closest('.picture');
     const index = [...thumbnails].indexOf(targetPicture);
 
-    fullSizeModeCancelElement.addEventListener('click', onFullSizeModeCancel);
+    fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
+      once: true,
+    });
     document.addEventListener('keydown', onFullSizeModePushEscape);
 
     showFullSizeMode(photos[index]);
   });
 };
 
-export { gallery };
+export { renderingGallery };
