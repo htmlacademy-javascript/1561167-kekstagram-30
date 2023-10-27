@@ -6,6 +6,6 @@ const getRandomNumber = (min, max) =>
 const getRandomArrayElement = (array) =>
   array[getRandomNumber(0, array.length - 1)];
 
-const isPushEscape = (evt) => evt.key === 'Escape';
+const isEscapeDown = (evt) => evt.key === 'Escape';
 
-export { getRandomNumber, getRandomArrayElement, isPushEscape };
+export { getRandomNumber, getRandomArrayElement, isEscapeDown };
