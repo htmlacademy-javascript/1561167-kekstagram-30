@@ -18,6 +18,7 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 
 let onCommentsLoaderShowMore = null;
 
+// TODO: вынести в template
 const getCommentHTML = ({ avatar, name, message }) =>
   `<li class="social__comment">
     <img
@@ -27,6 +28,7 @@ const getCommentHTML = ({ avatar, name, message }) =>
       width="35" height="35">
     <p class="social__text">${message}</p>
   </li>`;
+// TODO: вынести в отдельный модуль
 const renderNextComments = (parentComments, count, arrayComments) => {
   const comments = arrayComments.slice(0, count);
 
