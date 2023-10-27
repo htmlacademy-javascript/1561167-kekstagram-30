@@ -78,3 +78,4 @@ const showFullSizeMode = ({ url, likes, comments, description }) => {
 };
 
 export { showFullSizeMode, closeFullSizeMode, fullSizeModeCloseElement };
+//
