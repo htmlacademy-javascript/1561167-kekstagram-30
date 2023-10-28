@@ -13,43 +13,39 @@ const socialCommentTotalCount = bigPicture.querySelector(
   '.social__comment-total-count'
 );
 const socialCaption = bigPicture.querySelector('.social__caption');
-const socialComments = bigPicture.querySelector('.social__comments');
+const commentsList = bigPicture.querySelector('.social__comments');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+const commentTemplate = document
+  .querySelector('#comment')
+  .content.querySelector('.social__comment');
 
 let onCommentsLoaderShowMore = null;
 
-// TODO: вынести в template
-const getCommentHTML = ({ avatar, name, message }) =>
-  `<li class="social__comment">
-    <img
-      class="social__picture"
-      src="${avatar}"
-      alt="${name}}"
-      width="35" height="35">
-    <p class="social__text">${message}</p>
-  </li>`;
-// TODO: вынести в отдельный модуль
-const renderNextComments = (parentComments, count, arrayComments) => {
-  const comments = arrayComments.slice(0, count);
+const getCommentElement = ({ avatar, name, message }) => {
+  const commentElement = commentTemplate.cloneNode(true);
+  const avatarElement = commentElement.querySelector('.social__picture');
 
-  parentComments.textContent = '';
-  parentComments.insertAdjacentHTML(
-    'beforeend',
-    comments.map(getCommentHTML).join('')
-  );
+  avatarElement.src = avatar;
+  avatarElement.alt = name;
+  commentElement.querySelector('.social__text').textContent = message;
+  return commentElement;
+};
+// TODO: вынести в отдельный модуль
+const renderComments = (count, arrayComments) => {
+  const comments = arrayComments.slice(0, count);
+  const isLengthsMatch = comments.length === arrayComments.length;
+
+  commentsList.textContent = '';
+  commentsList.append(...comments.map(getCommentElement));
+
   socialCommentShownCount.textContent = comments.length;
   socialCommentTotalCount.textContent = arrayComments.length;
-  if (comments.length === arrayComments.length) {
-    commentsLoader.classList.add('hidden');
-  } else {
-    commentsLoader.classList.remove('hidden');
-  }
+  commentsLoader.classList[isLengthsMatch ? 'add' : 'remove']('hidden');
 };
-const handlerShowMore = (parentComments, shownCount, arrayComments) => () => {
+const handlerShowMore = (shownCount, comments) => () => {
   shownCount += MAXIMUM_COUNT_COMMENTS_SHOWN;
-  renderNextComments(parentComments, shownCount, arrayComments);
+  renderComments(shownCount, comments);
 };
-
 const closeFullSizeMode = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -64,13 +60,8 @@ const showFullSizeMode = ({ url, likes, comments, description }) => {
   likesCount.textContent = likes;
   socialCaption.textContent = description;
 
-  renderNextComments(socialComments, commentShownCount, comments);
-  // socialCommentCount.classList.add('hidden');
-  onCommentsLoaderShowMore = handlerShowMore(
-    socialComments,
-    commentShownCount,
-    comments
-  );
+  renderComments(commentShownCount, comments);
+  onCommentsLoaderShowMore = handlerShowMore(commentShownCount, comments);
   commentsLoader.addEventListener('click', onCommentsLoaderShowMore);
 
   document.body.classList.add('modal-open');
@@ -78,4 +69,3 @@ const showFullSizeMode = ({ url, likes, comments, description }) => {
 };
 
 export { showFullSizeMode, closeFullSizeMode, fullSizeModeCloseElement };
-//

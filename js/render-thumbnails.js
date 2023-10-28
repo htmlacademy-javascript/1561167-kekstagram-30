@@ -3,7 +3,7 @@ const photoTemplate = document
   .querySelector('#picture')
   ?.content.querySelector('.picture');
 
-const renderThumbnail = ({ url, description, likes, comments }) => {
+const getThumbnailElement = ({ url, description, likes, comments }) => {
   const photoElement = photoTemplate.cloneNode(true);
   const pictureImg = photoElement.querySelector('.picture__img');
 
@@ -17,6 +17,6 @@ const renderThumbnail = ({ url, description, likes, comments }) => {
 };
 
 const renderThumbnails = (photos) =>
-  photosList.append(...photos.map(renderThumbnail));
+  photosList.append(...photos.map(getThumbnailElement));
 
 export { renderThumbnails, photosList };
