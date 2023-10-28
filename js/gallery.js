@@ -1,8 +1,5 @@
 import { isEscapeDown } from './util.js';
-import {
-  containerPhotos,
-  renderingThumbnails,
-} from './rendering-thumbnails.js';
+import { photosList, renderThumbnails } from './render-thumbnails.js';
 import {
   showFullSizeMode,
   closeFullSizeMode,
@@ -22,10 +19,10 @@ function onFullSizeModeClose() {
   document.removeEventListener('keydown', onFullSizeModePushEscape);
 }
 const renderingGallery = (photos) => {
-  renderingThumbnails(photos);
-  const thumbnails = containerPhotos.querySelectorAll('.picture');
+  renderThumbnails(photos);
+  const thumbnails = photosList.querySelectorAll('.picture');
 
-  containerPhotos.addEventListener('click', (evt) => {
+  photosList.addEventListener('click', (evt) => {
     const targetPicture = evt.target.closest('.picture');
     const index = [...thumbnails].indexOf(targetPicture);
 
