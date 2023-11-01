@@ -24,6 +24,9 @@ const renderingGallery = (photos) => {
 
   photosList.addEventListener('click', (evt) => {
     const targetPicture = evt.target.closest('.picture');
+    if (!targetPicture) {
+      return;
+    }
     const index = [...thumbnails].indexOf(targetPicture);
 
     fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
