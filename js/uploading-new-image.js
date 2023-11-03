@@ -1,4 +1,4 @@
-import { switchingModalShow, isEscapeDown } from './util.js';
+import { toggleModalShow, isEscapeDown } from './util.js';
 import {
   checkField,
   checkHashtagsField,
@@ -23,7 +23,7 @@ const parentFields = imageUploadForm.querySelectorAll(
   '.img-upload__field-wrapper'
 );
 
-const onImageEditingFormPushEscape = (evt) => {
+const onImageEditingFormEscapeKeydown = (evt) => {
   if (!isEscapeDown(evt)) {
     return;
   }
@@ -47,7 +47,7 @@ const onHashtagsFieldСhecking = (evt) => {
   const target = evt.target;
   const parentHashtagField = target.closest('.img-upload__field-wrapper');
   const errorMessage = checkField(target.value, checkHashtagsField);
-  if (errorMessage) {
+  if (errorMessage.length !== 0) {
     renderValidationErrors(errorMessage, parentHashtagField);
   }
 };
@@ -56,7 +56,7 @@ const onDescriptionFieldСhecking = (evt) => {
   const target = evt.target;
   const parentHashtagField = target.closest('.img-upload__field-wrapper');
   const errorMessage = checkField(target.value, checkDescriptionField);
-  if (errorMessage) {
+  if (errorMessage.length !== 0) {
     renderValidationErrors(errorMessage, parentHashtagField);
   }
 };
@@ -70,10 +70,6 @@ const onFieldClearErrors = (evt) => {
 };
 
 const onImageEditingFormShow = () => {
-  if (!imageUploadField.value) {
-    return;
-  }
-
   imageEditingCloseElement.addEventListener('click', onImageEditingFormClose, {
     once: true,
   });
@@ -82,7 +78,7 @@ const onImageEditingFormShow = () => {
   hashtagsField.addEventListener('focus', onFieldClearErrors);
   descriptionField.addEventListener('blur', onDescriptionFieldСhecking);
   descriptionField.addEventListener('focus', onFieldClearErrors);
-  document.addEventListener('keydown', onImageEditingFormPushEscape);
+  document.addEventListener('keydown', onImageEditingFormEscapeKeydown);
 
   imageUploadField.value = '';
   hashtagsField.value = '';
@@ -91,17 +87,17 @@ const onImageEditingFormShow = () => {
     parentFields.forEach(removeValidationErrors);
   }
 
-  switchingModalShow(imageEditingForm);
+  toggleModalShow(imageEditingForm);
 };
 
 function onImageEditingFormClose() {
-  switchingModalShow(imageEditingForm, false);
+  toggleModalShow(imageEditingForm, false);
   hashtagsField.removeEventListener('blur', onHashtagsFieldСhecking);
   hashtagsField.removeEventListener('focus', onFieldClearErrors);
   descriptionField.removeEventListener('blur', onDescriptionFieldСhecking);
   descriptionField.removeEventListener('focus', onFieldClearErrors);
   imageUploadForm.removeEventListener('submit', onImageEditingFormSubmit);
-  document.removeEventListener('keydown', onImageEditingFormPushEscape);
+  document.removeEventListener('keydown', onImageEditingFormEscapeKeydown);
 }
 
 const uploadingNewImage = () => {

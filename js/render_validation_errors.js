@@ -8,7 +8,7 @@ const renderValidationErrors = (errorMessage, parentElement) => {
 
 const removeValidationErrors = (parent) => {
   parent.classList.remove('img-upload__field-wrapper--error');
-  parent.children[parent.children.length - 1].remove();
+  parent.children.at(-1)?.remove();
 };
 
 const hasValidationErrors = (parentFields) =>

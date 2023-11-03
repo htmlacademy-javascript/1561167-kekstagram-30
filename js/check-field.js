@@ -7,27 +7,24 @@ const checkHashtagsField = (value) => {
   const hashtags = value
     .trim()
     .split(' ')
-    .filter((item) => !!item);
-  // console.log('checkHashtagsField  hashtags:', hashtags);
+    .filter((item) => item !== '');
   const regExpHashteg = /^#[a-zа-яё0-9]{1,19}$/i;
   const isValidHashtag = hashtags.every((hashtag) =>
     regExpHashteg.test(hashtag)
   );
-  // console.log('checkHashtagsField  isValidHashtag:', isValidHashtag);
   const uniqueHashtags = new Set(hashtags);
-  // console.log('checkHashtagsField  uniqueHashtags:', uniqueHashtags);
   let errorMessage = '';
 
   if (!isValidHashtag) {
-    errorMessage += 'введён невалидный хэш-тег;';
+    errorMessage +=
+      'хэш-тег дожен начинаться с #, быть длинной до 20 символов и состоять только из букв и цифр;';
   }
   if (hashtags.length > MAXIMUM_NUMBER_HASHTAGS) {
-    errorMessage += ' превышено количество хэш-тегов;';
+    errorMessage += ' можно указать не более 5 хэш-тегов;';
   }
   if (uniqueHashtags.size !== hashtags.length) {
     errorMessage += ' хэш-теги повторяются.';
   }
-  // console.log('checkHashtagsField  errorMessage:', errorMessage);
 
   return errorMessage.trimStart();
 };

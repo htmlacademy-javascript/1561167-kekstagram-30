@@ -1,3 +1,4 @@
+import { toggleModalShow } from './util.js';
 import { renderComments } from './render-comments.js';
 
 const MAXIMUM_COUNT_COMMENTS_SHOWN = 5;
@@ -35,8 +36,9 @@ const showFullSizeMode = ({ url, likes, comments, description }) => {
   onCommentsLoaderShowMore = handlerShowMore(commentShownCount, comments);
   commentsLoader.addEventListener('click', onCommentsLoaderShowMore);
 
-  document.body.classList.add('modal-open');
-  bigPicture.classList.remove('hidden');
+  // document.body.classList.add('modal-open');
+  // bigPicture.classList.remove('hidden');
+  toggleModalShow(bigPicture);
 };
 
 export { showFullSizeMode, closeFullSizeMode, fullSizeModeCloseElement };
