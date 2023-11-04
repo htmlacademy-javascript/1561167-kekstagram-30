@@ -5,6 +5,7 @@ const checkField = (value, cb) => cb(value);
 
 const checkHashtagsField = (value) => {
   // TODO: использовать плагин /vendor/pristine
+
   const hashtags = value
     .trim()
     .split(' ')
@@ -18,7 +19,7 @@ const checkHashtagsField = (value) => {
 
   if (!isValidHashtag) {
     errorMessage +=
-      'хэш-тег дожен начинаться с #, быть длинной до 20 символов и состоять только из букв и цифр;';
+      'хэш-тег начинаться с #, быть длинной до 20 символов и состоять из букв и цифр;';
   }
   if (hashtags.length > MAXIMUM_NUMBER_HASHTAGS) {
     errorMessage += ' можно указать не более 5 хэш-тегов;';
