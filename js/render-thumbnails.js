@@ -3,7 +3,7 @@ const photoTemplate = document
   .querySelector('#picture')
   ?.content.querySelector('.picture');
 
-const getThumbnailElement = ({ url, description, likes, comments }) => {
+const getThumbnailElement = ({ id, url, description, likes, comments }) => {
   const photoElement = photoTemplate.cloneNode(true);
   const pictureImg = photoElement.querySelector('.picture__img');
 
@@ -12,6 +12,7 @@ const getThumbnailElement = ({ url, description, likes, comments }) => {
   photoElement.querySelector('.picture__comments').textContent =
     comments.length;
   photoElement.querySelector('.picture__likes').textContent = likes;
+  photoElement.dataset.thumbnailId = id;
 
   return photoElement;
 };

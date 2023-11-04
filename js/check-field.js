@@ -4,6 +4,7 @@ const MAXIMUM_DESCRIPTION_LENGTH = 140;
 const checkField = (value, cb) => cb(value);
 
 const checkHashtagsField = (value) => {
+  // TODO: использовать плагин /vendor/pristine
   const hashtags = value
     .trim()
     .split(' ')
@@ -30,6 +31,7 @@ const checkHashtagsField = (value) => {
 };
 
 const checkDescriptionField = (values) => {
+  // TODO: использовать плагин /vendor/pristine
   const description = values.trim();
 
   if (description.length > MAXIMUM_DESCRIPTION_LENGTH) {

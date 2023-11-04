@@ -34,7 +34,7 @@ const onImageEditingFormEscapeKeydown = (evt) => {
 
 const onImageEditingFormSubmit = (evt) => {
   evt.preventDefault();
-
+  // TODO: валидация данных. т.к. отправка может быть ч\з enter
   if (hasValidationErrors(parentFields)) {
     // Есть ошибки.Данные не прошли валидацию. Обработка ошибок
     return false;

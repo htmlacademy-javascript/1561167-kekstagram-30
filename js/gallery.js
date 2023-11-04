@@ -19,23 +19,24 @@ function onFullSizeModeClose() {
   document.removeEventListener('keydown', onFullSizeModeEscapeKeydown);
 }
 const renderingGallery = (photos) => {
-  renderThumbnails(photos);
-  const thumbnails = photosList.querySelectorAll('.picture');
-
   photosList.addEventListener('click', (evt) => {
-    const targetPicture = evt.target.closest('.picture');
-    if (!targetPicture) {
+    const thumbnailTarget = evt.target.closest('.picture');
+    if (!thumbnailTarget) {
       return;
     }
-    const index = [...thumbnails].indexOf(targetPicture);
+
+    const thumbnailId = +thumbnailTarget.dataset.thumbnailId;
+    const photo = photos.find(({ id }) => id === thumbnailId);
 
     fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
       once: true,
     });
     document.addEventListener('keydown', onFullSizeModeEscapeKeydown);
 
-    showFullSizeMode(photos[index]);
+    showFullSizeMode(photo);
   });
+
+  renderThumbnails(photos);
 };
 
 export { renderingGallery };

@@ -20,7 +20,7 @@ const getCommentElement = ({ avatar, name, message }) => {
   commentElement.querySelector('.social__text').textContent = message;
   return commentElement;
 };
-// TODO: вынести в отдельный модуль
+
 const renderComments = (count, arrayComments) => {
   const comments = arrayComments.slice(0, count);
   const isLengthsMatch = comments.length === arrayComments.length;
