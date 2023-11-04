@@ -1,15 +1,5 @@
 import { toggleModalShow, isEscapeDown } from './util.js';
-import {
-  checkField,
-  checkHashtagsField,
-  checkDescriptionField,
-} from './check-field.js';
-
-import {
-  renderValidationErrors,
-  removeValidationErrors,
-  hasValidationErrors,
-} from './render_validation_errors.js';
+import { initValidation } from './validate-field.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const imageUploadField = imageUploadForm.querySelector('.img-upload__input');
@@ -19,9 +9,8 @@ const imageEditingCloseElement = imageEditingForm.querySelector(
 );
 const hashtagsField = imageUploadForm.querySelector('.text__hashtags');
 const descriptionField = imageUploadForm.querySelector('.text__description');
-const parentFields = imageUploadForm.querySelectorAll(
-  '.img-upload__field-wrapper'
-);
+
+let pristine;
 
 const onImageEditingFormEscapeKeydown = (evt) => {
   if (!isEscapeDown(evt)) {
@@ -34,38 +23,14 @@ const onImageEditingFormEscapeKeydown = (evt) => {
 
 const onImageEditingFormSubmit = (evt) => {
   evt.preventDefault();
-  // TODO: валидация данных. т.к. отправка может быть по enter
-  if (hasValidationErrors(parentFields)) {
-    // Есть ошибки.Данные не прошли валидацию. Обработка ошибок
-    return false;
-  }
-  // Нет ошибок. Данные прошли валидацию. Отправка данных на сервер
-  return true;
-};
 
-const onHashtagsFieldСhecking = (evt) => {
-  const target = evt.target;
-  const parentHashtagField = target.closest('.img-upload__field-wrapper');
-  const errorMessage = checkField(target.value, checkHashtagsField);
-  if (errorMessage.length !== 0) {
-    renderValidationErrors(errorMessage, parentHashtagField);
-  }
-};
+  const isValidField = pristine.validate();
 
-const onDescriptionFieldСhecking = (evt) => {
-  const target = evt.target;
-  const parentHashtagField = target.closest('.img-upload__field-wrapper');
-  const errorMessage = checkField(target.value, checkDescriptionField);
-  if (errorMessage.length !== 0) {
-    renderValidationErrors(errorMessage, parentHashtagField);
-  }
-};
-
-const onFieldClearErrors = (evt) => {
-  const target = evt.target;
-  const parentField = target.closest('.img-upload__field-wrapper');
-  if (hasValidationErrors([parentField])) {
-    removeValidationErrors(parentField);
+  if (isValidField) {
+    // TODO: Отправка формы
+    onImageEditingFormClose();
+  } else {
+    // TODO: Ошибки. Отправка не возможна
   }
 };
 
@@ -73,35 +38,37 @@ const onImageEditingFormShow = () => {
   imageEditingCloseElement.addEventListener('click', onImageEditingFormClose, {
     once: true,
   });
+  hashtagsField.addEventListener('focus', onFieldEscapeKeydown);
+  descriptionField.addEventListener('focus', onFieldEscapeKeydown);
   imageUploadForm.addEventListener('submit', onImageEditingFormSubmit);
-  hashtagsField.addEventListener('blur', onHashtagsFieldСhecking);
-  hashtagsField.addEventListener('focus', onFieldClearErrors);
-  descriptionField.addEventListener('blur', onDescriptionFieldСhecking);
-  descriptionField.addEventListener('focus', onFieldClearErrors);
   document.addEventListener('keydown', onImageEditingFormEscapeKeydown);
 
   imageUploadField.value = '';
   hashtagsField.value = '';
   descriptionField.value = '';
-  if (hasValidationErrors(parentFields)) {
-    parentFields.forEach(removeValidationErrors);
-  }
-
+  pristine = initValidation(imageUploadForm, hashtagsField, descriptionField);
   toggleModalShow(imageEditingForm);
 };
-
-function onImageEditingFormClose() {
-  toggleModalShow(imageEditingForm, false);
-  hashtagsField.removeEventListener('blur', onHashtagsFieldСhecking);
-  hashtagsField.removeEventListener('focus', onFieldClearErrors);
-  descriptionField.removeEventListener('blur', onDescriptionFieldСhecking);
-  descriptionField.removeEventListener('focus', onFieldClearErrors);
-  imageUploadForm.removeEventListener('submit', onImageEditingFormSubmit);
-  document.removeEventListener('keydown', onImageEditingFormEscapeKeydown);
-}
 
 const uploadingNewImage = () => {
   imageUploadField.addEventListener('change', onImageEditingFormShow);
 };
+
+function onImageEditingFormClose() {
+  hashtagsField.removeEventListener('focus', onFieldEscapeKeydown);
+  descriptionField.removeEventListener('focus', onFieldEscapeKeydown);
+  imageUploadForm.removeEventListener('submit', onImageEditingFormSubmit);
+  document.removeEventListener('keydown', onImageEditingFormEscapeKeydown);
+  toggleModalShow(imageEditingForm, false);
+}
+
+function onFieldEscapeKeydown() {
+  this.addEventListener('keydown', (evt) => {
+    if (!isEscapeDown(evt)) {
+      return;
+    }
+    evt.stopPropagation();
+  });
+}
 
 export { uploadingNewImage };
