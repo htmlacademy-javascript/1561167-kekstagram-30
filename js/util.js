@@ -8,4 +8,17 @@ const getRandomArrayElement = (array) =>
 
 const isEscapeDown = (evt) => evt.key === 'Escape';
 
-export { getRandomNumber, getRandomArrayElement, isEscapeDown };
+const toggleModalShow = (element, isModalOpen = true) => {
+  const methodElement = isModalOpen ? 'remove' : 'add';
+  const methodBody = isModalOpen ? 'add' : 'remove';
+
+  element.classList[methodElement]('hidden');
+  document.body.classList[methodBody]('modal-open');
+};
+
+export {
+  getRandomNumber,
+  getRandomArrayElement,
+  isEscapeDown,
+  toggleModalShow,
+};
