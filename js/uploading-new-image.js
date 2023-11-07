@@ -1,5 +1,6 @@
 import { toggleModalShow, isEscapeDown } from './util.js';
 import { initValidation } from './validate-field.js';
+import { initImageScale, resetImageScale } from './image-scale.js';
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const imageUploadField = imageUploadForm.querySelector('.img-upload__input');
@@ -52,6 +53,7 @@ const onImageEditingFormShow = () => {
   hashtagsField.value = '';
   descriptionField.value = '';
 
+  initImageScale();
   pristine = initValidation(imageUploadForm, hashtagsField, descriptionField);
 
   toggleModalShow(imageEditingForm);
@@ -66,6 +68,7 @@ function onImageEditingFormClose() {
   descriptionField.removeEventListener('keydown', onTextFieldEscapeKeydown);
   imageUploadForm.removeEventListener('submit', onImageEditingFormSubmit);
   document.removeEventListener('keydown', onImageEditingFormEscapeKeydown);
+  resetImageScale();
   toggleModalShow(imageEditingForm, false);
 }
 
