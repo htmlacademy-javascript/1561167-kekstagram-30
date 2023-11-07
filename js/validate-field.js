@@ -1,59 +1,51 @@
-const MAXIMUM_NUMBER_HASHTAGS = 5;
+const MAXIMUM_QUANTITY_HASHTAGS = 5;
 const MAXIMUM_DESCRIPTION_LENGTH = 140;
+const ERROR_MESSAGE_UNVALID =
+  'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;';
+const ERROR_MESSAGE_MORE_LIMITED = 'можно указать не более 5 хэш-тегов;';
+const ERROR_MESSAGE_REPEATED = 'хэш-теги повторяются.';
+const ERROR_MESSAGE_LENGTH = `длина комментария больше ${MAXIMUM_DESCRIPTION_LENGTH} символов.`;
 
 let errorMessages = {};
 
 const validateDescriptionField = (value) =>
   value.length >= 0 && value.length <= MAXIMUM_DESCRIPTION_LENGTH;
 
-const validateHashtagField = (value) => {
-  const hashtags = value
+const validateHashtagField = (hashtags) => {
+  const normalizeHashtags = hashtags
     .trim()
     .split(' ')
-    .filter((item) => item.length !== 0);
-  const regExpHashteg = /^#[a-zа-яё0-9]{1,19}$/i;
-  const isValidHashtags = hashtags.every((item) => regExpHashteg.test(item));
-  const isExceededLimitHashtags = hashtags.length > MAXIMUM_NUMBER_HASHTAGS;
+    .filter((item) => item.length !== 0)
+    .map((item) => item.toLowerCase());
+  const regexHashteg = /^#[a-zа-яё0-9]{1,19}$/;
+  const isValidHashtags = normalizeHashtags.every((item) =>
+    regexHashteg.test(item)
+  );
+  const isMoreLimitedHashtags =
+    normalizeHashtags.length > MAXIMUM_QUANTITY_HASHTAGS;
+  const uniqueHashtags = new Set(normalizeHashtags);
+  const isUniqueHashtags = normalizeHashtags.length === uniqueHashtags.size;
 
-  const uniqueHashtags = new Set();
-  hashtags.forEach((item) => uniqueHashtags.add(item));
-  const isUniqueHashtags = hashtags.length === uniqueHashtags.size;
-
-  errorMessages = {};
   if (!isValidHashtags) {
-    errorMessages.valid =
-      'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;';
-    return isValidHashtags;
+    errorMessages.valid = ERROR_MESSAGE_UNVALID;
   }
-  if (isExceededLimitHashtags) {
-    errorMessages.number = 'можно указать не более 5 хэш-тегов;';
-    return !isExceededLimitHashtags;
+  if (isMoreLimitedHashtags) {
+    errorMessages.limited = ERROR_MESSAGE_MORE_LIMITED;
   }
   if (!isUniqueHashtags) {
-    errorMessages.unique = 'хэш-теги повторяются.';
+    errorMessages.repeated = ERROR_MESSAGE_REPEATED;
   }
 
-  return isUniqueHashtags;
+  return isValidHashtags && !isMoreLimitedHashtags && isUniqueHashtags;
 };
 
-const getHashtagValidationErrors = () => Object.values(errorMessages).join(' ');
-
-const eraseValidationErrors = (...elements) => {
-  const parents = elements.map((item) => item.parentElement);
-
-  parents.forEach((parent) => {
-    const isError = parent.classList.contains(
-      'img-upload__field-wrapper--error'
-    );
-
-    if (!isError) {
-      return;
-    }
-
-    parent.classList.remove('img-upload__field-wrapper--error');
-    parent.lastElementChild.remove();
-  });
+const getHashtagValidationErrors = () => {
+  const message = Object.values(errorMessages).join(' ');
+  errorMessages = {};
+  return message;
 };
+
+const getDescriptionValidationErrors = () => ERROR_MESSAGE_LENGTH;
 
 const initValidation = (
   validatedFormElement,
@@ -76,9 +68,8 @@ const initValidation = (
   pristine.addValidator(
     validatedDescriptionElement,
     validateDescriptionField,
-    'длина комментария больше 140 символов.'
+    getDescriptionValidationErrors
   );
-  eraseValidationErrors(validatedHashtagElement, validatedDescriptionElement);
 
   return pristine;
 };
