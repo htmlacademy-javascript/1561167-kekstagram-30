@@ -12,6 +12,13 @@ const descriptionField = imageUploadForm.querySelector('.text__description');
 
 let pristine;
 
+const onTextFieldEscapeKeydown = (evt) => {
+  if (!isEscapeDown(evt)) {
+    return;
+  }
+  evt.stopPropagation();
+};
+
 const onImageEditingFormEscapeKeydown = (evt) => {
   if (!isEscapeDown(evt)) {
     return;
@@ -24,13 +31,11 @@ const onImageEditingFormEscapeKeydown = (evt) => {
 const onImageEditingFormSubmit = (evt) => {
   evt.preventDefault();
 
-  const isValidField = pristine.validate();
+  const isValidFields = pristine.validate();
 
-  if (isValidField) {
-    // TODO: Отправка формы
+  if (isValidFields) {
+    // imageUploadForm.submit();
     onImageEditingFormClose();
-  } else {
-    // TODO: Ошибки. Отправка не возможна
   }
 };
 
@@ -38,37 +43,30 @@ const onImageEditingFormShow = () => {
   imageEditingCloseElement.addEventListener('click', onImageEditingFormClose, {
     once: true,
   });
-  hashtagsField.addEventListener('focus', onFieldEscapeKeydown);
-  descriptionField.addEventListener('focus', onFieldEscapeKeydown);
+  hashtagsField.addEventListener('keydown', onTextFieldEscapeKeydown);
+  descriptionField.addEventListener('keydown', onTextFieldEscapeKeydown);
   imageUploadForm.addEventListener('submit', onImageEditingFormSubmit);
   document.addEventListener('keydown', onImageEditingFormEscapeKeydown);
 
   imageUploadField.value = '';
   hashtagsField.value = '';
   descriptionField.value = '';
+
   pristine = initValidation(imageUploadForm, hashtagsField, descriptionField);
+
   toggleModalShow(imageEditingForm);
 };
 
-const uploadingNewImage = () => {
+const initImageUpload = () => {
   imageUploadField.addEventListener('change', onImageEditingFormShow);
 };
 
 function onImageEditingFormClose() {
-  hashtagsField.removeEventListener('focus', onFieldEscapeKeydown);
-  descriptionField.removeEventListener('focus', onFieldEscapeKeydown);
+  hashtagsField.removeEventListener('keydown', onTextFieldEscapeKeydown);
+  descriptionField.removeEventListener('keydown', onTextFieldEscapeKeydown);
   imageUploadForm.removeEventListener('submit', onImageEditingFormSubmit);
   document.removeEventListener('keydown', onImageEditingFormEscapeKeydown);
   toggleModalShow(imageEditingForm, false);
 }
 
-function onFieldEscapeKeydown() {
-  this.addEventListener('keydown', (evt) => {
-    if (!isEscapeDown(evt)) {
-      return;
-    }
-    evt.stopPropagation();
-  });
-}
-
-export { uploadingNewImage };
+export { initImageUpload };

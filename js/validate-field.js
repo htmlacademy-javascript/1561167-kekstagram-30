@@ -10,10 +10,11 @@ const validateHashtagField = (value) => {
   const hashtags = value
     .trim()
     .split(' ')
-    .filter((item) => item !== '');
+    .filter((item) => item.length !== 0);
   const regExpHashteg = /^#[a-zа-яё0-9]{1,19}$/i;
   const isValidHashtags = hashtags.every((item) => regExpHashteg.test(item));
-  const isNumberHashtags = hashtags.length <= MAXIMUM_NUMBER_HASHTAGS;
+  const isExceededLimitHashtags = hashtags.length > MAXIMUM_NUMBER_HASHTAGS;
+
   const uniqueHashtags = new Set();
   hashtags.forEach((item) => uniqueHashtags.add(item));
   const isUniqueHashtags = hashtags.length === uniqueHashtags.size;
@@ -24,9 +25,9 @@ const validateHashtagField = (value) => {
       'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;';
     return isValidHashtags;
   }
-  if (!isNumberHashtags) {
+  if (isExceededLimitHashtags) {
     errorMessages.number = 'можно указать не более 5 хэш-тегов;';
-    return isNumberHashtags;
+    return !isExceededLimitHashtags;
   }
   if (!isUniqueHashtags) {
     errorMessages.unique = 'хэш-теги повторяются.';
@@ -41,7 +42,11 @@ const eraseValidationErrors = (...elements) => {
   const parents = elements.map((item) => item.parentElement);
 
   parents.forEach((parent) => {
-    if (!parent.classList.contains('img-upload__field-wrapper--error')) {
+    const isError = parent.classList.contains(
+      'img-upload__field-wrapper--error'
+    );
+
+    if (!isError) {
       return;
     }
 
