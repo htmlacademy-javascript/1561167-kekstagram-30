@@ -1,4 +1,4 @@
-const effectsOptions = {
+const EffectsOptions = {
   none: {
     filter: '',
     range: {
@@ -72,7 +72,7 @@ const effectsList = uploadForm.querySelector('.effects__list');
 
 let effectType = '';
 
-const getEffectOptionsByType = (value) => effectsOptions[value];
+const getEffectOptionsByType = (value) => EffectsOptions[value];
 
 const onEffectsFieldsClick = (evt) => {
   const target = evt.target.closest('.effects__radio');
