@@ -28,12 +28,12 @@ const onChangingImageScaleClick = (evt) => {
 };
 
 const initImageScale = () => {
-  imageScaleField.value = `${DEFAULT_VALUE_SCALE}%`;
   scale = new CounterInRange({
     range: { min: MINIMUM_IMAGE_SCALE, max: MAXIMUM_IMAGE_SCALE },
     start: DEFAULT_VALUE_SCALE,
     step: STEP_IMAGE_SCALE,
   });
+  imageScaleField.value = `${scale.get()}%`;
   imgUploadPpreview.style.transform = `scale(${scale.get() / 100})`;
   imgUploadScale.addEventListener('click', onChangingImageScaleClick);
 };

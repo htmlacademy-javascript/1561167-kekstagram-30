@@ -1,6 +1,7 @@
 import { toggleModalShow, isEscapeDown } from './util.js';
 import { initValidation } from './validate-field.js';
 import { initImageScale, resetImageScale } from './image-scale.js';
+import { InitImageEffect, resetImageEffect } from './image-effects.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('.img-upload__input');
@@ -20,6 +21,7 @@ const onUploadFormEscapeKeydown = (evt) => {
   if (!isEscapeDown(evt)) {
     return;
   }
+
   if (!isTextFieldsFocused(hashtagsField, descriptionField)) {
     evt.preventDefault();
     onUploadFormClose();
@@ -33,7 +35,7 @@ const onUploadFormSubmit = (evt) => {
     return;
   }
 
-  // uploadForm.submit();
+  uploadForm.submit();
   onUploadFormClose();
 };
 
@@ -45,6 +47,7 @@ const onUploadFormShow = () => {
   document.addEventListener('keydown', onUploadFormEscapeKeydown);
 
   initImageScale();
+  InitImageEffect();
 
   toggleModalShow(uploadFormOverlay);
 };
@@ -58,6 +61,7 @@ function onUploadFormClose() {
   document.removeEventListener('keydown', onUploadFormEscapeKeydown);
   uploadForm.reset();
   pristine.reset();
+  resetImageEffect();
   resetImageScale();
   toggleModalShow(uploadFormOverlay, false);
 }
