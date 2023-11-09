@@ -16,9 +16,24 @@ const toggleModalShow = (element, isModalOpen = true) => {
   document.body.classList[methodBody]('modal-open');
 };
 
+function CounterInRange({ range: { min, max }, start, step }) {
+  this.get = function () {
+    return start;
+  };
+  this.up = function () {
+    start = Math.min(start + step, max);
+    return start;
+  };
+  this.down = function () {
+    start = Math.max(start - step, min);
+    return start;
+  };
+}
+
 export {
   getRandomNumber,
   getRandomArrayElement,
   isEscapeDown,
   toggleModalShow,
+  CounterInRange,
 };
