@@ -1,6 +1,7 @@
-import { createPhotos } from './data.js';
 import { renderingGallery } from './gallery.js';
 import { initImageUpload } from './image-upload.js';
+import { getData } from './data.js';
+import { showErrorMessage } from './util.js';
 
-renderingGallery(createPhotos());
+getData(renderingGallery, showErrorMessage);
 initImageUpload();

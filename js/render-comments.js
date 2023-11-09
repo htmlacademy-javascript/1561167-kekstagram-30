@@ -1,3 +1,5 @@
+import { getTemplateElementById } from './util';
+
 const bigPicture = document.querySelector('.big-picture');
 const commentsList = bigPicture.querySelector('.social__comments');
 const socialCommentShownCount = bigPicture.querySelector(
@@ -7,12 +9,9 @@ const socialCommentTotalCount = bigPicture.querySelector(
   '.social__comment-total-count'
 );
 const commentsLoader = bigPicture.querySelector('.comments-loader');
-const commentTemplate = document
-  .querySelector('#comment')
-  .content.querySelector('.social__comment');
 
 const getCommentElement = ({ avatar, name, message }) => {
-  const commentElement = commentTemplate.cloneNode(true);
+  const commentElement = getTemplateElementById('#comment', '.social__comment');
   const avatarElement = commentElement.querySelector('.social__picture');
 
   avatarElement.src = avatar;
