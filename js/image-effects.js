@@ -74,8 +74,8 @@ let effectType = '';
 
 const getEffectOptionsByType = (value) => effectsOptions[value];
 
-const onEffectsFieldsClick = (evt) => {
-  const target = evt.target.closest('.effects__radio');
+const onEffectsFieldsClick = ({ target }) => {
+  target = target.closest('.effects__radio');
 
   if (target === null || effectType === target.value) {
     return;

@@ -36,8 +36,6 @@ const showFullSizeMode = ({ url, likes, comments, description }) => {
   onCommentsLoaderShowMore = handlerShowMore(commentShownCount, comments);
   commentsLoader.addEventListener('click', onCommentsLoaderShowMore);
 
-  // document.body.classList.add('modal-open');
-  // bigPicture.classList.remove('hidden');
   toggleModalShow(bigPicture);
 };
 

@@ -14,8 +14,8 @@ const imgUploadPpreview = imageUploadForm.querySelector(
 
 let scale;
 
-const onChangingImageScaleClick = (evt) => {
-  const target = evt.target.closest('.scale__control');
+const onChangingImageScaleClick = ({ target }) => {
+  target = target.closest('.scale__control');
 
   if (target === null) {
     return;
