@@ -1,7 +1,17 @@
 import { toggleModalShow, isEscapeDown } from './util.js';
 import { initValidation } from './validate-field.js';
 import { initImageScale, resetImageScale } from './image-scale.js';
-import { InitImageEffect, resetImageEffect } from './image-effects.js';
+import { initImageEffect, resetImageEffect } from './image-effects.js';
+import { sendData } from './data.js';
+import {
+  showSendingErrorMessage,
+  showSendingSuccessMessage,
+} from './message.js';
+
+const ButtonCaption = {
+  SEND: 'Публикую...',
+  PUBLISH: 'Опубликовать',
+};
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('.img-upload__input');
@@ -9,6 +19,7 @@ const uploadFormOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadFormCloseElement = uploadFormOverlay.querySelector(
   '.img-upload__cancel'
 );
+const uploadFormSubmitElement = uploadForm.querySelector('.img-upload__submit');
 const hashtagsField = uploadForm.querySelector('.text__hashtags');
 const descriptionField = uploadForm.querySelector('.text__description');
 
@@ -17,15 +28,38 @@ const pristine = initValidation(uploadForm, hashtagsField, descriptionField);
 const isTextFieldsFocused = (...textFields) =>
   textFields.some((field) => field === document.activeElement);
 
+const isElementExists = (selector) => Boolean(document.querySelector(selector));
+
 const onUploadFormEscapeKeydown = (evt) => {
   if (!isEscapeDown(evt)) {
     return;
   }
 
-  if (!isTextFieldsFocused(hashtagsField, descriptionField)) {
+  if (
+    !isTextFieldsFocused(hashtagsField, descriptionField) &&
+    !isElementExists('.error')
+  ) {
     evt.preventDefault();
     onUploadFormClose();
   }
+};
+
+const toggleSubmitElement = (isEnabled) => {
+  uploadFormSubmitElement.textContent = isEnabled
+    ? ButtonCaption.PUBLISH
+    : ButtonCaption.SEND;
+  uploadFormSubmitElement.disabled = !isEnabled;
+};
+
+const executeOnSuccess = () => {
+  toggleSubmitElement(true);
+  onUploadFormClose();
+  showSendingSuccessMessage();
+};
+
+const executeOnFailure = () => {
+  toggleSubmitElement(true);
+  showSendingErrorMessage();
 };
 
 const onUploadFormSubmit = (evt) => {
@@ -35,8 +69,8 @@ const onUploadFormSubmit = (evt) => {
     return;
   }
 
-  uploadForm.submit();
-  onUploadFormClose();
+  toggleSubmitElement(false);
+  sendData(executeOnSuccess, executeOnFailure, new FormData(uploadForm));
 };
 
 const onUploadFormShow = () => {
@@ -47,7 +81,7 @@ const onUploadFormShow = () => {
   document.addEventListener('keydown', onUploadFormEscapeKeydown);
 
   initImageScale();
-  InitImageEffect();
+  initImageEffect();
 
   toggleModalShow(uploadFormOverlay);
 };

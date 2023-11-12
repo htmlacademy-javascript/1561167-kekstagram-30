@@ -1,9 +1,10 @@
 import { getTemplateElementById } from './util';
 
 const photosList = document.querySelector('.pictures');
+const element = getTemplateElementById('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
-  const photoElement = getTemplateElementById('#picture');
+  const photoElement = element();
   const pictureImg = photoElement.querySelector('.picture__img');
 
   pictureImg.src = url;

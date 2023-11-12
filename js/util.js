@@ -1,5 +1,3 @@
-const TIME_DELAY = 5000;
-
 const isEscapeDown = (evt) => evt.key === 'Escape';
 
 const toggleModalShow = (element, isModalOpen = true) => {
@@ -23,24 +21,18 @@ function CounterInRange({ range: { min, max }, start, step }) {
     return start;
   };
 }
+
+const replaceFirstCharacter = (string) => `.${string.slice(1, string.length)}`;
+
 const getTemplateElementById = (selector, contentSelector = '') => {
   if (contentSelector.length === 0) {
-    contentSelector = `.${selector.slice(1, selector.length)}`;
+    contentSelector = replaceFirstCharacter(selector);
   }
   const templateElement = document
     .querySelector(selector)
     .content.querySelector(contentSelector);
 
-  return templateElement.cloneNode(true);
-};
-
-const showErrorMessage = () => {
-  const messageElement = getTemplateElementById('#data-error');
-  document.body.append(messageElement);
-
-  setTimeout(() => {
-    messageElement.remove();
-  }, TIME_DELAY);
+  return () => templateElement.cloneNode(true);
 };
 
 export {
@@ -48,5 +40,5 @@ export {
   toggleModalShow,
   CounterInRange,
   getTemplateElementById,
-  showErrorMessage,
+  replaceFirstCharacter,
 };

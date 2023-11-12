@@ -9,9 +9,10 @@ const socialCommentTotalCount = bigPicture.querySelector(
   '.social__comment-total-count'
 );
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+const element = getTemplateElementById('#comment', '.social__comment');
 
 const getCommentElement = ({ avatar, name, message }) => {
-  const commentElement = getTemplateElementById('#comment', '.social__comment');
+  const commentElement = element();
   const avatarElement = commentElement.querySelector('.social__picture');
 
   avatarElement.src = avatar;
