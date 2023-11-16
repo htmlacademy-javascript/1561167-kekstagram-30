@@ -19,8 +19,8 @@ function onFullSizeModeClose() {
   document.removeEventListener('keydown', onFullSizeModeEscapeKeydown);
 }
 const renderingGallery = (photos) => {
-  photosList.addEventListener('click', (evt) => {
-    const thumbnailTarget = evt.target.closest('.picture');
+  photosList.addEventListener('click', ({target}) => {
+    const thumbnailTarget = target.closest('.picture');
     if (!thumbnailTarget) {
       return;
     }

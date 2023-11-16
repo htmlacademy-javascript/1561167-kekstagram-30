@@ -3,10 +3,10 @@ const checkLengthString = (str, maxLength) => str.length <= maxLength;
 checkLengthString('hello', 10);
 
 // Функция для проверки, является ли строка палиндромом
-const formatString = (str) => String(str).replaceAll(' ', '').toLowerCase();
+const normalizeString = (str) => String(str).replaceAll(' ', '').toLowerCase();
 
 const isPalindrom1 = (str) => {
-  str = formatString(str);
+  str = normalizeString(str);
 
   return str === str.split('').reverse().join('');
 };

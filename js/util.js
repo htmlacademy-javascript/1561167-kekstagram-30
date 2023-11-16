@@ -1,11 +1,3 @@
-// Возвращает произвольное целое число из диапазона min..max
-const getRandomNumber = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
-
-// Возвращант произвольный элемент массива
-const getRandomArrayElement = (array) =>
-  array[getRandomNumber(0, array.length - 1)];
-
 const isEscapeDown = (evt) => evt.key === 'Escape';
 
 const toggleModalShow = (element, isModalOpen = true) => {
@@ -30,10 +22,23 @@ function CounterInRange({ range: { min, max }, start, step }) {
   };
 }
 
+const replaceFirstCharacter = (string) => `.${string.slice(1, string.length)}`;
+
+const getTemplateElementById = (selector, contentSelector = '') => {
+  if (contentSelector.length === 0) {
+    contentSelector = replaceFirstCharacter(selector);
+  }
+  const templateElement = document
+    .querySelector(selector)
+    .content.querySelector(contentSelector);
+
+  return () => templateElement.cloneNode(true);
+};
+
 export {
-  getRandomNumber,
-  getRandomArrayElement,
   isEscapeDown,
   toggleModalShow,
   CounterInRange,
+  getTemplateElementById,
+  replaceFirstCharacter,
 };

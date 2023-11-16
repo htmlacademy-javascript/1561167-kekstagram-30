@@ -1,10 +1,10 @@
+import { getTemplateElementById } from './util';
+
 const photosList = document.querySelector('.pictures');
-const photoTemplate = document
-  .querySelector('#picture')
-  ?.content.querySelector('.picture');
+const element = getTemplateElementById('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
-  const photoElement = photoTemplate.cloneNode(true);
+  const photoElement = element();
   const pictureImg = photoElement.querySelector('.picture__img');
 
   pictureImg.src = url;

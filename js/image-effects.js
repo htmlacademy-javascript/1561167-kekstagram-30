@@ -1,4 +1,4 @@
-const EffectsOptions = {
+const effectsOptions = {
   none: {
     filter: '',
     range: {
@@ -72,10 +72,10 @@ const effectsList = uploadForm.querySelector('.effects__list');
 
 let effectType = '';
 
-const getEffectOptionsByType = (value) => EffectsOptions[value];
+const getEffectOptionsByType = (value) => effectsOptions[value];
 
-const onEffectsFieldsClick = (evt) => {
-  const target = evt.target.closest('.effects__radio');
+const onEffectsFieldsClick = ({ target }) => {
+  target = target.closest('.effects__radio');
 
   if (target === null || effectType === target.value) {
     return;
@@ -108,7 +108,7 @@ const onSliderElementUpdate = () => {
   imageEffectPreview.style.filter = `${filter}(${effectLevel}${unit})`;
 };
 
-const InitImageEffect = () => {
+const initImageEffect = () => {
   const {
     range: { min, max },
     start,
@@ -148,4 +148,4 @@ const resetImageEffect = () => {
   effectsList.removeEventListener('click', onEffectsFieldsClick);
 };
 
-export { InitImageEffect, resetImageEffect };
+export { initImageEffect, resetImageEffect };
