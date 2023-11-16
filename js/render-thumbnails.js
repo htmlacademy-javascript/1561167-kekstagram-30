@@ -1,10 +1,10 @@
 import { createElementFromTemplate } from './util';
 
 const photosList = document.querySelector('.pictures');
-const getElement = createElementFromTemplate('#picture');
+const getTemplateElement = createElementFromTemplate('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
-  const photoElement = getElement();
+  const photoElement = getTemplateElement();
   const pictureImg = photoElement.querySelector('.picture__img');
 
   pictureImg.src = url;
@@ -17,7 +17,13 @@ const getThumbnailElement = ({ id, url, description, likes, comments }) => {
   return photoElement;
 };
 
-const renderThumbnails = (photos) =>
+const renderThumbnails = (photos) => {
+  [...photosList.children].forEach((element) => {
+    if (element.classList.contains('picture')) {
+      element.remove();
+    }
+  });
   photosList.append(...photos.map(getThumbnailElement));
+};
 
 export { renderThumbnails, photosList };

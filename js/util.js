@@ -35,10 +35,53 @@ const createElementFromTemplate = (selector, contentSelector = '') => {
   return () => templateElement.cloneNode(true);
 };
 
+const getRandomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const generateRandomUniqueNumber = (min, max) => {
+  const array = Array.from(
+    { length: max - min + 1 },
+    (_, index) => min + index
+  );
+
+  return () => {
+    const index = getRandomNumber(0, array.length - 1);
+
+    if (array.length) {
+      return array.splice(index, 1)[0];
+    }
+
+    return null;
+  };
+};
+
+const getRandomUniqueElements = (array, quantity) => {
+  const result = [];
+  const uniqueIndex = generateRandomUniqueNumber(0, array.length - 1);
+
+  quantity = Math.min(quantity, array.length);
+  for (let i = 0; i < quantity; i++) {
+    result.push(array[uniqueIndex()]);
+  }
+
+  return result;
+};
+
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 export {
   isEscapeDown,
   toggleModalShow,
   CounterInRange,
   createElementFromTemplate,
   replaceFirstCharacter,
+  getRandomUniqueElements,
+  debounce,
 };

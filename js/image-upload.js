@@ -8,6 +8,7 @@ import {
   showSendingSuccessMessage,
 } from './message.js';
 
+const ACCEPTABLE_FILE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png'];
 const ButtonCaption = {
   SEND: 'Публикую...',
   PUBLISH: 'Опубликовать',
@@ -16,6 +17,10 @@ const ButtonCaption = {
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('.img-upload__input');
 const uploadFormOverlay = uploadForm.querySelector('.img-upload__overlay');
+const uploadPreview = uploadFormOverlay.querySelector(
+  '.img-upload__preview img'
+);
+const effectsPreview = uploadFormOverlay.querySelectorAll('.effects__preview');
 const uploadFormCloseElement = uploadFormOverlay.querySelector(
   '.img-upload__cancel'
 );
@@ -74,12 +79,26 @@ const onUploadFormSubmit = (evt) => {
 };
 
 const onUploadFormShow = () => {
+  const file = uploadField.files[0];
+  const fileName = file.name.toLowerCase();
+  const isAcceptable = ACCEPTABLE_FILE_EXTENSIONS.some((item) =>
+    fileName.endsWith(item)
+  );
+
+  if (!isAcceptable) {
+    return;
+  }
+
   uploadFormCloseElement.addEventListener('click', onUploadFormClose, {
     once: true,
   });
   uploadForm.addEventListener('submit', onUploadFormSubmit);
   document.addEventListener('keydown', onUploadFormEscapeKeydown);
 
+  uploadPreview.src = URL.createObjectURL(file);
+  effectsPreview.forEach((item) => {
+    item.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+  });
   initImageScale();
   initImageEffect();
 

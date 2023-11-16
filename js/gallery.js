@@ -5,6 +5,43 @@ import {
   closeFullSizeMode,
   fullSizeModeCloseElement,
 } from './show-full-size-mode.js';
+import { filters } from './filters.js';
+
+const executeOnce = () => {
+  let isDone = false;
+  return (photos) => {
+    if (isDone) {
+      return;
+    }
+
+    isDone = true;
+    photosList.addEventListener('click', ({ target }) => {
+      const thumbnailTarget = target.closest('.picture');
+      if (!thumbnailTarget) {
+        return;
+      }
+
+      const thumbnailId = +thumbnailTarget.dataset.thumbnailId;
+      const photo = photos.find(({ id }) => id === thumbnailId);
+
+      fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
+        once: true,
+      });
+      document.addEventListener('keydown', onFullSizeModeEscapeKeydown);
+
+      showFullSizeMode(photo);
+    });
+  };
+};
+
+const setEventHandler = executeOnce();
+
+const renderingGallery = (photos) => {
+  const dataPhotos = photos[filters.active()]();
+
+  setEventHandler(dataPhotos);
+  renderThumbnails(dataPhotos);
+};
 
 function onFullSizeModeEscapeKeydown(evt) {
   if (!isEscapeDown(evt)) {
@@ -14,29 +51,10 @@ function onFullSizeModeEscapeKeydown(evt) {
   evt.preventDefault();
   onFullSizeModeClose();
 }
+
 function onFullSizeModeClose() {
   closeFullSizeMode();
   document.removeEventListener('keydown', onFullSizeModeEscapeKeydown);
 }
-const renderingGallery = (photos) => {
-  photosList.addEventListener('click', ({target}) => {
-    const thumbnailTarget = target.closest('.picture');
-    if (!thumbnailTarget) {
-      return;
-    }
-
-    const thumbnailId = +thumbnailTarget.dataset.thumbnailId;
-    const photo = photos.find(({ id }) => id === thumbnailId);
-
-    fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
-      once: true,
-    });
-    document.addEventListener('keydown', onFullSizeModeEscapeKeydown);
-
-    showFullSizeMode(photo);
-  });
-
-  renderThumbnails(photos);
-};
 
 export { renderingGallery };
