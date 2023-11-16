@@ -24,7 +24,7 @@ function CounterInRange({ range: { min, max }, start, step }) {
 
 const replaceFirstCharacter = (string) => `.${string.slice(1, string.length)}`;
 
-const getTemplateElementById = (selector, contentSelector = '') => {
+const createElementFromTemplate = (selector, contentSelector = '') => {
   if (contentSelector.length === 0) {
     contentSelector = replaceFirstCharacter(selector);
   }
@@ -39,6 +39,6 @@ export {
   isEscapeDown,
   toggleModalShow,
   CounterInRange,
-  getTemplateElementById,
+  createElementFromTemplate,
   replaceFirstCharacter,
 };

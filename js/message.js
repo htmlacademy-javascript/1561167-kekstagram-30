@@ -1,9 +1,9 @@
-import { getTemplateElementById, isEscapeDown } from './util.js';
+import { createElementFromTemplate, isEscapeDown } from './util.js';
 
 const TIME_DELAY = 5000;
 
 const showLoadErrorMessage = () => {
-  const messageElement = getTemplateElementById('#data-error')();
+  const messageElement = createElementFromTemplate('#data-error')();
   document.body.append(messageElement);
 
   setTimeout(() => {
@@ -23,7 +23,7 @@ const hideSendingMessage = () => {
 const onCloseButtonClick = () => hideSendingMessage();
 
 const showSendingMessage = (selector) => {
-  const messageElement = getTemplateElementById(selector)();
+  const messageElement = createElementFromTemplate(selector)();
   const button = messageElement.querySelector('button');
 
   button.addEventListener('click', onCloseButtonClick, { once: true });

@@ -1,10 +1,10 @@
-import { getTemplateElementById } from './util';
+import { createElementFromTemplate } from './util';
 
 const photosList = document.querySelector('.pictures');
-const element = getTemplateElementById('#picture');
+const getElement = createElementFromTemplate('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
-  const photoElement = element();
+  const photoElement = getElement();
   const pictureImg = photoElement.querySelector('.picture__img');
 
   pictureImg.src = url;

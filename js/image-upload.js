@@ -44,7 +44,7 @@ const onUploadFormEscapeKeydown = (evt) => {
   }
 };
 
-const toggleSubmitElement = (isEnabled) => {
+const toggleStateSubmitElement = (isEnabled) => {
   uploadFormSubmitElement.textContent = isEnabled
     ? ButtonCaption.PUBLISH
     : ButtonCaption.SEND;
@@ -52,13 +52,13 @@ const toggleSubmitElement = (isEnabled) => {
 };
 
 const executeOnSuccess = () => {
-  toggleSubmitElement(true);
+  toggleStateSubmitElement(true);
   onUploadFormClose();
   showSendingSuccessMessage();
 };
 
 const executeOnFailure = () => {
-  toggleSubmitElement(true);
+  toggleStateSubmitElement(true);
   showSendingErrorMessage();
 };
 
@@ -69,7 +69,7 @@ const onUploadFormSubmit = (evt) => {
     return;
   }
 
-  toggleSubmitElement(false);
+  toggleStateSubmitElement(false);
   sendData(executeOnSuccess, executeOnFailure, new FormData(uploadForm));
 };
 
