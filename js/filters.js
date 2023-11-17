@@ -1,35 +1,38 @@
 const ACCEPTABLE_FILTERS = ['default', 'random', 'likes'];
 
-const section = document.querySelector('.img-filters');
-const form = section.querySelector('.img-filters__form');
-const buttons = form.querySelectorAll('.img-filters__button');
+const sectionNode = document.querySelector('.img-filters');
+const formNode = sectionNode.querySelector('.img-filters__form');
+const buttonNodes = formNode.querySelectorAll('.img-filters__button');
 
-const isActiveButton = (button) =>
-  button.classList.contains('img-filters__button--active');
+const isActiveButton = (node) =>
+  node.classList.contains('img-filters__button--active');
 
-const setActiveButton = (button) =>
-  button.classList.add('img-filters__button--active');
+const setActiveButton = (node) =>
+  node.classList.add('img-filters__button--active');
 
 const showFiltersSection = () =>
-  section.classList.remove('img-filters--inactive');
+  sectionNode.classList.remove('img-filters--inactive');
 
 const deactivateButtons = () =>
-  buttons.forEach((button) =>
-    button.classList.remove('img-filters__button--active')
+  buttonNodes.forEach((node) =>
+    node.classList.remove('img-filters__button--active')
   );
 
 const filters = new (function () {
   this.init = function () {
-    const maximumFilters = Math.min(buttons.length, ACCEPTABLE_FILTERS.length);
+    const maximumFilters = Math.min(
+      buttonNodes.length,
+      ACCEPTABLE_FILTERS.length
+    );
 
-    [...buttons].slice(0, maximumFilters).forEach((button, index) => {
-      button.dataset.photosFilter = ACCEPTABLE_FILTERS[index];
-      if (isActiveButton(button)) {
-        this.filter = button.dataset.photosFilter;
+    [...buttonNodes].slice(0, maximumFilters).forEach((buttonNode, index) => {
+      buttonNode.dataset.photosFilter = ACCEPTABLE_FILTERS[index];
+      if (isActiveButton(buttonNode)) {
+        this.filter = buttonNode.dataset.photosFilter;
       }
     });
     if (this.filter === undefined) {
-      setActiveButton(buttons[0]);
+      setActiveButton(buttonNodes[0]);
       this.filter = ACCEPTABLE_FILTERS[0];
     }
     showFiltersSection();
@@ -38,19 +41,19 @@ const filters = new (function () {
     return this.filter;
   };
   this.setClick = function (cb) {
-    form.addEventListener('click', ({ target }) => {
-      target = target.closest('.img-filters__button');
-      if (target === null) {
+    formNode.addEventListener('click', ({ target }) => {
+      const targetNode = target.closest('.img-filters__button');
+      if (targetNode === null) {
         return;
       }
 
       const isAcceptable = ACCEPTABLE_FILTERS.some(
-        (filter) => filter === target.dataset.photosFilter
+        (filter) => filter === targetNode.dataset.photosFilter
       );
-      const activeButton = isAcceptable ? target : buttons[0];
+      const activeButton = isAcceptable ? targetNode : buttonNodes[0];
 
       this.filter = isAcceptable
-        ? target.dataset.photosFilter
+        ? targetNode.dataset.photosFilter
         : ACCEPTABLE_FILTERS[0];
       deactivateButtons();
       setActiveButton(activeButton);
