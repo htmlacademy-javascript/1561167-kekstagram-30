@@ -16,7 +16,7 @@ const request = (
   fetch(route, { method, body })
     .then((response) => {
       if (!response.ok) {
-        throw new Error();
+        throw new Error(`${response.text}: ${response.statusText}`);
       }
       return response.json();
     })

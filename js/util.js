@@ -24,7 +24,7 @@ function CounterInRange({ range: { min, max }, start, step }) {
 
 const replaceFirstCharacter = (string) => `.${string.slice(1, string.length)}`;
 
-const getTemplateElementById = (selector, contentSelector = '') => {
+const createElementFromTemplate = (selector, contentSelector = '') => {
   if (contentSelector.length === 0) {
     contentSelector = replaceFirstCharacter(selector);
   }
@@ -35,10 +35,52 @@ const getTemplateElementById = (selector, contentSelector = '') => {
   return () => templateElement.cloneNode(true);
 };
 
+const getRandomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+const generateRandomUniqueNumber = (min, max) => {
+  const array = Array.from(
+    { length: max - min + 1 },
+    (_, index) => min + index
+  );
+
+  return () => {
+    const index = getRandomNumber(0, array.length - 1);
+
+    if (array.length !== 0) {
+      return array.splice(index, 1)[0];
+    }
+
+    return null;
+  };
+};
+
+const getRandomUniqueElements = (array, quantity) => {
+  const result = [];
+  const getUniqueIndex = generateRandomUniqueNumber(0, array.length - 1);
+
+  quantity = Math.min(quantity, array.length);
+  for (let i = 0; i < quantity; i++) {
+    result.push(array[getUniqueIndex()]);
+  }
+  return result;
+};
+
+function debounce(callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 export {
   isEscapeDown,
   toggleModalShow,
   CounterInRange,
-  getTemplateElementById,
+  createElementFromTemplate,
   replaceFirstCharacter,
+  getRandomUniqueElements,
+  debounce,
 };

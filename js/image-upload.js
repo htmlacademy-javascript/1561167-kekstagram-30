@@ -3,11 +3,9 @@ import { initValidation } from './validate-field.js';
 import { initImageScale, resetImageScale } from './image-scale.js';
 import { initImageEffect, resetImageEffect } from './image-effects.js';
 import { sendData } from './data.js';
-import {
-  showSendingErrorMessage,
-  showSendingSuccessMessage,
-} from './message.js';
+import { showErrorMessage, showSuccessMessage } from './message.js';
 
+const ACCEPTABLE_FILE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png'];
 const ButtonCaption = {
   SEND: 'Публикую...',
   PUBLISH: 'Опубликовать',
@@ -16,6 +14,10 @@ const ButtonCaption = {
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('.img-upload__input');
 const uploadFormOverlay = uploadForm.querySelector('.img-upload__overlay');
+const uploadPreview = uploadFormOverlay.querySelector(
+  '.img-upload__preview img'
+);
+const effectsPreview = uploadFormOverlay.querySelectorAll('.effects__preview');
 const uploadFormCloseElement = uploadFormOverlay.querySelector(
   '.img-upload__cancel'
 );
@@ -44,7 +46,7 @@ const onUploadFormEscapeKeydown = (evt) => {
   }
 };
 
-const toggleSubmitElement = (isEnabled) => {
+const toggleStateSubmitElement = (isEnabled) => {
   uploadFormSubmitElement.textContent = isEnabled
     ? ButtonCaption.PUBLISH
     : ButtonCaption.SEND;
@@ -52,14 +54,14 @@ const toggleSubmitElement = (isEnabled) => {
 };
 
 const executeOnSuccess = () => {
-  toggleSubmitElement(true);
+  toggleStateSubmitElement(true);
   onUploadFormClose();
-  showSendingSuccessMessage();
+  showSuccessMessage();
 };
 
 const executeOnFailure = () => {
-  toggleSubmitElement(true);
-  showSendingErrorMessage();
+  toggleStateSubmitElement(true);
+  showErrorMessage();
 };
 
 const onUploadFormSubmit = (evt) => {
@@ -69,17 +71,36 @@ const onUploadFormSubmit = (evt) => {
     return;
   }
 
-  toggleSubmitElement(false);
+  toggleStateSubmitElement(false);
   sendData(executeOnSuccess, executeOnFailure, new FormData(uploadForm));
 };
 
 const onUploadFormShow = () => {
+  const file = uploadField.files[0];
+  const fileName = file.name.toLowerCase();
+  const isAcceptable = ACCEPTABLE_FILE_EXTENSIONS.some((item) =>
+    fileName.endsWith(item)
+  );
+
+  if (!isAcceptable) {
+    showErrorMessage(
+      `Ошибка! Выбери файл с расширением ${ACCEPTABLE_FILE_EXTENSIONS.join(
+        ', '
+      )}`
+    );
+    return;
+  }
+
   uploadFormCloseElement.addEventListener('click', onUploadFormClose, {
     once: true,
   });
   uploadForm.addEventListener('submit', onUploadFormSubmit);
   document.addEventListener('keydown', onUploadFormEscapeKeydown);
 
+  uploadPreview.src = URL.createObjectURL(file);
+  effectsPreview.forEach((item) => {
+    item.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+  });
   initImageScale();
   initImageEffect();
 
