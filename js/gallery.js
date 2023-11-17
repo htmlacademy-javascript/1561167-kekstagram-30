@@ -7,39 +7,11 @@ import {
 } from './show-full-size-mode.js';
 import { filters } from './filters.js';
 
-const executeOnce = () => {
-  let isDone = false;
-  return (photos) => {
-    if (isDone) {
-      return;
-    }
-
-    isDone = true;
-    photosList.addEventListener('click', ({ target }) => {
-      const thumbnailTarget = target.closest('.picture');
-      if (!thumbnailTarget) {
-        return;
-      }
-
-      const thumbnailId = +thumbnailTarget.dataset.thumbnailId;
-      const photo = photos.find(({ id }) => id === thumbnailId);
-
-      fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
-        once: true,
-      });
-      document.addEventListener('keydown', onFullSizeModeEscapeKeydown);
-
-      showFullSizeMode(photo);
-    });
-  };
-};
-
-const setEventHandler = executeOnce();
+let dataPhotos = [];
 
 const renderingGallery = (photos) => {
-  const dataPhotos = photos[filters.active()]();
+  dataPhotos = photos[filters.active()]();
 
-  setEventHandler(dataPhotos);
   renderThumbnails(dataPhotos);
 };
 
@@ -56,5 +28,22 @@ function onFullSizeModeClose() {
   closeFullSizeMode();
   document.removeEventListener('keydown', onFullSizeModeEscapeKeydown);
 }
+
+photosList.addEventListener('click', ({ target }) => {
+  const thumbnailTarget = target.closest('.picture');
+  if (thumbnailTarget === null) {
+    return;
+  }
+
+  const thumbnailId = +thumbnailTarget.dataset.thumbnailId;
+  const photo = dataPhotos.find(({ id }) => id === thumbnailId);
+
+  fullSizeModeCloseElement.addEventListener('click', onFullSizeModeClose, {
+    once: true,
+  });
+  document.addEventListener('keydown', onFullSizeModeEscapeKeydown);
+
+  showFullSizeMode(photo);
+});
 
 export { renderingGallery };

@@ -3,10 +3,7 @@ import { initValidation } from './validate-field.js';
 import { initImageScale, resetImageScale } from './image-scale.js';
 import { initImageEffect, resetImageEffect } from './image-effects.js';
 import { sendData } from './data.js';
-import {
-  showSendingErrorMessage,
-  showSendingSuccessMessage,
-} from './message.js';
+import { showErrorMessage, showSuccessMessage } from './message.js';
 
 const ACCEPTABLE_FILE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png'];
 const ButtonCaption = {
@@ -59,12 +56,12 @@ const toggleStateSubmitElement = (isEnabled) => {
 const executeOnSuccess = () => {
   toggleStateSubmitElement(true);
   onUploadFormClose();
-  showSendingSuccessMessage();
+  showSuccessMessage();
 };
 
 const executeOnFailure = () => {
   toggleStateSubmitElement(true);
-  showSendingErrorMessage();
+  showErrorMessage();
 };
 
 const onUploadFormSubmit = (evt) => {
@@ -86,6 +83,11 @@ const onUploadFormShow = () => {
   );
 
   if (!isAcceptable) {
+    showErrorMessage(
+      `Ошибка! Выбери файл с расширением ${ACCEPTABLE_FILE_EXTENSIONS.join(
+        ', '
+      )}`
+    );
     return;
   }
 

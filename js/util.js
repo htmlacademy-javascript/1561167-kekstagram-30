@@ -47,7 +47,7 @@ const generateRandomUniqueNumber = (min, max) => {
   return () => {
     const index = getRandomNumber(0, array.length - 1);
 
-    if (array.length) {
+    if (array.length !== 0) {
       return array.splice(index, 1)[0];
     }
 
@@ -57,13 +57,12 @@ const generateRandomUniqueNumber = (min, max) => {
 
 const getRandomUniqueElements = (array, quantity) => {
   const result = [];
-  const uniqueIndex = generateRandomUniqueNumber(0, array.length - 1);
+  const getUniqueIndex = generateRandomUniqueNumber(0, array.length - 1);
 
   quantity = Math.min(quantity, array.length);
   for (let i = 0; i < quantity; i++) {
-    result.push(array[uniqueIndex()]);
+    result.push(array[getUniqueIndex()]);
   }
-
   return result;
 };
 
