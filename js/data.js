@@ -1,5 +1,4 @@
 const BASE_URL = 'https://30.javascript.pages.academy/kekstagram';
-
 const Method = { GET: 'GET', POST: 'POST' };
 const Route = {
   [Method.GET]: '/data',

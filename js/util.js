@@ -28,11 +28,11 @@ const createElementFromTemplate = (selector, contentSelector = '') => {
   if (contentSelector.length === 0) {
     contentSelector = replaceFirstCharacter(selector);
   }
-  const templateElement = document
+  const templateNode = document
     .querySelector(selector)
     .content.querySelector(contentSelector);
 
-  return () => templateElement.cloneNode(true);
+  return () => templateNode.cloneNode(true);
 };
 
 const getRandomNumber = (min, max) =>
@@ -66,14 +66,14 @@ const getRandomUniqueElements = (array, quantity) => {
   return result;
 };
 
-function debounce(callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
 
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
 export {
   isEscapeDown,

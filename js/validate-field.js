@@ -1,3 +1,4 @@
+const TEMPLATE_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/;
 const MAXIMUM_QUANTITY_HASHTAGS = 5;
 const MAXIMUM_DESCRIPTION_LENGTH = 140;
 const ERROR_MESSAGE_UNVALID =
@@ -17,9 +18,8 @@ const validateHashtagField = (hashtags) => {
     .split(' ')
     .filter((item) => item.length !== 0)
     .map((item) => item.toLowerCase());
-  const regexHashteg = /^#[a-zа-яё0-9]{1,19}$/;
   const isValidHashtags = normalizeHashtags.every((item) =>
-    regexHashteg.test(item)
+    TEMPLATE_HASHTAG.test(item)
   );
   const isMoreLimitedHashtags =
     normalizeHashtags.length > MAXIMUM_QUANTITY_HASHTAGS;
@@ -47,7 +47,7 @@ const getHashtagValidationErrors = () => {
 
 const getDescriptionValidationErrors = () => ERROR_MESSAGE_LENGTH;
 
-const initValidation = (
+const initializeValidation = (
   validatedFormElement,
   validatedHashtagElement,
   validatedDescriptionElement
@@ -74,4 +74,4 @@ const initValidation = (
   return pristine;
 };
 
-export { initValidation };
+export { initializeValidation };

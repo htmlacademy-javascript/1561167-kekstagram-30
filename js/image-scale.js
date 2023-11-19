@@ -1,16 +1,14 @@
-import { CounterInRange } from './util.js';
-
 const MAXIMUM_IMAGE_SCALE = 100;
 const MINIMUM_IMAGE_SCALE = 25;
 const DEFAULT_VALUE_SCALE = 100;
 const STEP_IMAGE_SCALE = 25;
 
-const imageUploadForm = document.querySelector('.img-upload__form');
-const imgUploadScale = imageUploadForm.querySelector('.img-upload__scale');
-const imageScaleField = imgUploadScale.querySelector('.scale__control--value');
-const imgUploadPpreview = imageUploadForm.querySelector(
-  '.img-upload__preview img'
-);
+import { CounterInRange } from './util.js';
+
+const formNode = document.querySelector('.img-upload__form');
+const scaleNode = formNode.querySelector('.img-upload__scale');
+const scaleFieldNode = scaleNode.querySelector('.scale__control--value');
+const effectPreviewNode = formNode.querySelector('.img-upload__preview img');
 
 let scale;
 
@@ -21,24 +19,24 @@ const onChangingImageScaleClick = ({ target }) => {
     return;
   }
 
-  imageScaleField.value = target.classList.contains('scale__control--bigger')
+  scaleFieldNode.value = target.classList.contains('scale__control--bigger')
     ? `${scale.up()}%`
     : `${scale.down()}%`;
-  imgUploadPpreview.style.transform = `scale(${scale.get() / 100})`;
+  effectPreviewNode.style.transform = `scale(${scale.get() / 100})`;
 };
 
-const initImageScale = () => {
+const initializeImageScale = () => {
   scale = new CounterInRange({
     range: { min: MINIMUM_IMAGE_SCALE, max: MAXIMUM_IMAGE_SCALE },
     start: DEFAULT_VALUE_SCALE,
     step: STEP_IMAGE_SCALE,
   });
-  imageScaleField.value = `${scale.get()}%`;
-  imgUploadPpreview.style.transform = `scale(${scale.get() / 100})`;
-  imgUploadScale.addEventListener('click', onChangingImageScaleClick);
+  scaleFieldNode.value = `${scale.get()}%`;
+  effectPreviewNode.style.transform = `scale(${scale.get() / 100})`;
+  scaleNode.addEventListener('click', onChangingImageScaleClick);
 };
 
 const resetImageScale = () =>
-  imgUploadScale.removeEventListener('click', onChangingImageScaleClick);
+  scaleNode.removeEventListener('click', onChangingImageScaleClick);
 
-export { initImageScale, resetImageScale };
+export { initializeImageScale, resetImageScale };

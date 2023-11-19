@@ -1,42 +1,41 @@
+const MAXIMUM_COUNT_COMMENTS_SHOWN = 5;
+
 import { toggleModalShow } from './util.js';
 import { renderComments } from './render-comments.js';
 
-const MAXIMUM_COUNT_COMMENTS_SHOWN = 5;
+const bigPictureNode = document.querySelector('.big-picture');
+const imageNode = bigPictureNode.querySelector('.big-picture__img img');
+const countLikesNode = bigPictureNode.querySelector('.likes-count');
+const socialCaptionNode = bigPictureNode.querySelector('.social__caption');
+const commentsLoaderNode = bigPictureNode.querySelector('.comments-loader');
 
-const bigPicture = document.querySelector('.big-picture');
-const fullSizeModeCloseElement = bigPicture.querySelector(
-  '.big-picture__cancel'
-);
-const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
-const likesCount = bigPicture.querySelector('.likes-count');
-const socialCaption = bigPicture.querySelector('.social__caption');
-const commentsLoader = bigPicture.querySelector('.comments-loader');
+let onCommentsLoaderShowMore;
 
-let onCommentsLoaderShowMore = null;
-
-const handlerShowMore = (shownCount, comments) => () => {
+const getShowMoreHandler = (shownCount, comments) => () => {
   shownCount += MAXIMUM_COUNT_COMMENTS_SHOWN;
   renderComments(shownCount, comments);
 };
+
 const closeFullSizeMode = () => {
-  bigPicture.classList.add('hidden');
+  bigPictureNode.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  commentsLoader.removeEventListener('click', onCommentsLoaderShowMore);
+  commentsLoaderNode.removeEventListener('click', onCommentsLoaderShowMore);
 };
+
 const showFullSizeMode = ({ url, likes, comments, description }) => {
   const commentShownCount = Math.min(
     comments.length,
     MAXIMUM_COUNT_COMMENTS_SHOWN
   );
-  bigPictureImage.src = url;
-  likesCount.textContent = likes;
-  socialCaption.textContent = description;
+  imageNode.src = url;
+  countLikesNode.textContent = likes;
+  socialCaptionNode.textContent = description;
 
   renderComments(commentShownCount, comments);
-  onCommentsLoaderShowMore = handlerShowMore(commentShownCount, comments);
-  commentsLoader.addEventListener('click', onCommentsLoaderShowMore);
+  onCommentsLoaderShowMore = getShowMoreHandler(commentShownCount, comments);
+  commentsLoaderNode.addEventListener('click', onCommentsLoaderShowMore);
 
-  toggleModalShow(bigPicture);
+  toggleModalShow(bigPictureNode);
 };
 
-export { showFullSizeMode, closeFullSizeMode, fullSizeModeCloseElement };
+export { showFullSizeMode, closeFullSizeMode };
