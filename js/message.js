@@ -1,39 +1,41 @@
-import { createElementFromTemplate, isEscapeDown } from './util.js';
-
 const TIME_DELAY = 5000;
 
+import { createElementFromTemplate, isEscapeDown } from './util.js';
+
 const showLoadErrorMessage = () => {
-  const messageElement = createElementFromTemplate('#data-error')();
-  document.body.append(messageElement);
+  const messageNode = createElementFromTemplate('#data-error')();
+  document.body.append(messageNode);
 
   setTimeout(() => {
-    messageElement.remove();
+    messageNode.remove();
   }, TIME_DELAY);
 };
 
 const hideMessage = () => {
-  const messageElement =
+  const messageNode =
     document.querySelector('.success') ?? document.querySelector('.error');
 
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
   document.body.removeEventListener('click', onBodyClick);
-  messageElement.remove();
+  messageNode.remove();
 };
 
 const onCloseButtonClick = () => hideMessage();
 
 const showMessage = (selector, title = null) => {
-  const messageElement = createElementFromTemplate(selector)();
-  const titleElement = messageElement.querySelector('.error__title');
-  const button = messageElement.querySelector('button');
+  const messageNode = createElementFromTemplate(selector)();
+  const titleNode = messageNode.querySelector('.error__title');
+  const buttonNode = messageNode.querySelector('button');
 
-  titleElement.textContent = title ?? 'Ошибка';
-  button.addEventListener('click', onCloseButtonClick, { once: true });
+  if (title !== null) {
+    titleNode.textContent = title;
+  }
+  buttonNode.addEventListener('click', onCloseButtonClick, { once: true });
   document.addEventListener('keydown', onDocumentEscapeKeydown);
   document.body.addEventListener('click', onBodyClick);
-  document.body.append(messageElement);
+  document.body.append(messageNode);
 };
-//
+
 const showErrorMessage = (title = 'Ошибка загрузки файла') =>
   showMessage('#error', title);
 

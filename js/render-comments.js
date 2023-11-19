@@ -1,36 +1,36 @@
 import { createElementFromTemplate } from './util';
 
-const bigPicture = document.querySelector('.big-picture');
-const commentsList = bigPicture.querySelector('.social__comments');
-const socialCommentShownCount = bigPicture.querySelector(
+const bigPictureNode = document.querySelector('.big-picture');
+const commentsListNode = bigPictureNode.querySelector('.social__comments');
+const shownCountNode = bigPictureNode.querySelector(
   '.social__comment-shown-count'
 );
-const socialCommentTotalCount = bigPicture.querySelector(
+const totalCountNode = bigPictureNode.querySelector(
   '.social__comment-total-count'
 );
-const commentsLoader = bigPicture.querySelector('.comments-loader');
-const getElement = createElementFromTemplate('#comment', '.social__comment');
+const buttonLoaderNode = bigPictureNode.querySelector('.comments-loader');
+const getNode = createElementFromTemplate('#comment', '.social__comment');
 
 const getCommentElement = ({ avatar, name, message }) => {
-  const commentElement = getElement();
-  const avatarElement = commentElement.querySelector('.social__picture');
+  const commentNode = getNode();
+  const avatarNode = commentNode.querySelector('.social__picture');
 
-  avatarElement.src = avatar;
-  avatarElement.alt = name;
-  commentElement.querySelector('.social__text').textContent = message;
-  return commentElement;
+  avatarNode.src = avatar;
+  avatarNode.alt = name;
+  commentNode.querySelector('.social__text').textContent = message;
+  return commentNode;
 };
 
 const renderComments = (count, arrayComments) => {
   const comments = arrayComments.slice(0, count);
   const isLengthsMatch = comments.length === arrayComments.length;
 
-  commentsList.textContent = '';
-  commentsList.append(...comments.map(getCommentElement));
+  commentsListNode.textContent = '';
+  commentsListNode.append(...comments.map(getCommentElement));
 
-  socialCommentShownCount.textContent = comments.length;
-  socialCommentTotalCount.textContent = arrayComments.length;
-  commentsLoader.classList[isLengthsMatch ? 'add' : 'remove']('hidden');
+  shownCountNode.textContent = comments.length;
+  totalCountNode.textContent = arrayComments.length;
+  buttonLoaderNode.classList[isLengthsMatch ? 'add' : 'remove']('hidden');
 };
 
 export { renderComments };

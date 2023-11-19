@@ -1,29 +1,28 @@
 import { createElementFromTemplate } from './util';
 
-const photosList = document.querySelector('.pictures');
-const getTemplateElement = createElementFromTemplate('#picture');
+const photosListNode = document.querySelector('.pictures');
+const getNode = createElementFromTemplate('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
-  const photoElement = getTemplateElement();
-  const pictureImg = photoElement.querySelector('.picture__img');
+  const photoNode = getNode();
+  const imgNoge = photoNode.querySelector('.picture__img');
 
-  pictureImg.src = url;
-  pictureImg.alt = description;
-  photoElement.querySelector('.picture__comments').textContent =
-    comments.length;
-  photoElement.querySelector('.picture__likes').textContent = likes;
-  photoElement.dataset.thumbnailId = id;
+  imgNoge.src = url;
+  imgNoge.alt = description;
+  photoNode.querySelector('.picture__comments').textContent = comments.length;
+  photoNode.querySelector('.picture__likes').textContent = likes;
+  photoNode.dataset.thumbnailId = id;
 
-  return photoElement;
+  return photoNode;
 };
 
 const renderThumbnails = (photos) => {
-  [...photosList.children].forEach((element) => {
+  [...photosListNode.children].forEach((element) => {
     if (element.classList.contains('picture')) {
       element.remove();
     }
   });
-  photosList.append(...photos.map(getThumbnailElement));
+  photosListNode.append(...photos.map(getThumbnailElement));
 };
 
-export { renderThumbnails, photosList };
+export { renderThumbnails };

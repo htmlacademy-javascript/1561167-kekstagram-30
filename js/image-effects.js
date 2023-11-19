@@ -61,14 +61,12 @@ const effectsOptions = {
   },
 };
 
-const uploadForm = document.querySelector('.img-upload__form');
-const effectLevelValueParent = uploadForm.querySelector(
-  '.img-upload__effect-level'
-);
-const effectLevelValue = uploadForm.querySelector('.effect-level__value');
-const sliderElement = uploadForm.querySelector('.effect-level__slider');
-const imageEffectPreview = uploadForm.querySelector('.img-upload__preview img');
-const effectsList = uploadForm.querySelector('.effects__list');
+const formNode = document.querySelector('.img-upload__form');
+const effectLevelNode = formNode.querySelector('.img-upload__effect-level');
+const effectLevelFieldNode = formNode.querySelector('.effect-level__value');
+const sliderNode = formNode.querySelector('.effect-level__slider');
+const effectPreviewNode = formNode.querySelector('.img-upload__preview img');
+const effectsListNode = formNode.querySelector('.effects__list');
 
 let effectType = '';
 
@@ -88,27 +86,27 @@ const onEffectsFieldsClick = ({ target }) => {
     start,
     step,
   } = getEffectOptionsByType(effectType);
-  sliderElement.noUiSlider.updateOptions({ range: { min, max }, start, step });
+  sliderNode.noUiSlider.updateOptions({ range: { min, max }, start, step });
 };
 
-const onSliderElementUpdate = () => {
+const onsliderNodeUpdate = () => {
   const { filter, unit } = getEffectOptionsByType(effectType);
-  const effectLevel = sliderElement.noUiSlider.get();
+  const effectLevel = sliderNode.noUiSlider.get();
 
   if (effectType === 'none') {
-    effectLevelValue.value = '';
-    imageEffectPreview.style.filter = '';
-    sliderElement.setAttribute('disabled', true);
-    effectLevelValueParent.classList.add('hidden');
+    effectLevelFieldNode.value = '';
+    effectPreviewNode.style.filter = '';
+    sliderNode.setAttribute('disabled', true);
+    effectLevelNode.classList.add('hidden');
     return;
   }
-  sliderElement.removeAttribute('disabled');
-  effectLevelValueParent.classList.remove('hidden');
-  effectLevelValue.value = effectLevel;
-  imageEffectPreview.style.filter = `${filter}(${effectLevel}${unit})`;
+  sliderNode.removeAttribute('disabled');
+  effectLevelNode.classList.remove('hidden');
+  effectLevelFieldNode.value = effectLevel;
+  effectPreviewNode.style.filter = `${filter}(${effectLevel}${unit})`;
 };
 
-const initImageEffect = () => {
+const initializeImageEffect = () => {
   const {
     range: { min, max },
     start,
@@ -116,7 +114,7 @@ const initImageEffect = () => {
   } = getEffectOptionsByType('none');
 
   effectType = 'none';
-  noUiSlider.create(sliderElement, {
+  noUiSlider.create(sliderNode, {
     range: {
       min,
       max,
@@ -135,17 +133,17 @@ const initImageEffect = () => {
     },
   });
 
-  sliderElement.setAttribute('disabled', true);
-  sliderElement.noUiSlider.on('update', onSliderElementUpdate);
+  sliderNode.setAttribute('disabled', true);
+  sliderNode.noUiSlider.on('update', onsliderNodeUpdate);
 
-  effectsList.addEventListener('click', onEffectsFieldsClick);
+  effectsListNode.addEventListener('click', onEffectsFieldsClick);
 };
 
 const resetImageEffect = () => {
-  imageEffectPreview.style.filter = '';
-  effectLevelValueParent.classList.remove('hidden');
-  sliderElement.noUiSlider.destroy();
-  effectsList.removeEventListener('click', onEffectsFieldsClick);
+  effectPreviewNode.style.filter = '';
+  effectLevelNode.classList.remove('hidden');
+  sliderNode.noUiSlider.destroy();
+  effectsListNode.removeEventListener('click', onEffectsFieldsClick);
 };
 
-export { initImageEffect, resetImageEffect };
+export { initializeImageEffect, resetImageEffect };

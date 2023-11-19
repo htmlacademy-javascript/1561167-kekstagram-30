@@ -1,62 +1,53 @@
 const ACCEPTABLE_FILTERS = ['default', 'random', 'likes'];
 
-const section = document.querySelector('.img-filters');
-const form = section.querySelector('.img-filters__form');
-const buttons = form.querySelectorAll('.img-filters__button');
+const sectionNode = document.querySelector('.img-filters');
+const formNode = sectionNode.querySelector('.img-filters__form');
+const buttonsNodes = formNode.querySelectorAll('.img-filters__button');
 
-const isActiveButton = (button) =>
-  button.classList.contains('img-filters__button--active');
+const isActiveButton = (node) =>
+  node.classList.contains('img-filters__button--active');
 
-const setActiveButton = (button) =>
-  button.classList.add('img-filters__button--active');
+const setActiveButton = (node) =>
+  node.classList.add('img-filters__button--active');
 
 const showFiltersSection = () =>
-  section.classList.remove('img-filters--inactive');
+  sectionNode.classList.remove('img-filters--inactive');
 
 const deactivateButtons = () =>
-  buttons.forEach((button) =>
+  buttonsNodes.forEach((button) =>
     button.classList.remove('img-filters__button--active')
   );
 
 const filters = new (function () {
-  this.init = function () {
-    const maximumFilters = Math.min(buttons.length, ACCEPTABLE_FILTERS.length);
-
-    [...buttons].slice(0, maximumFilters).forEach((button, index) => {
+  this.initialize = function () {
+    [...buttonsNodes].forEach((button, index) => {
       button.dataset.photosFilter = ACCEPTABLE_FILTERS[index];
       if (isActiveButton(button)) {
-        this.filter = button.dataset.photosFilter;
+        this.filter = ACCEPTABLE_FILTERS[index];
       }
     });
     if (this.filter === undefined) {
-      setActiveButton(buttons[0]);
+      setActiveButton(buttonsNodes[0]);
       this.filter = ACCEPTABLE_FILTERS[0];
     }
     showFiltersSection();
   };
-  this.active = function () {
+  this.get = function () {
     return this.filter;
   };
-  this.setClick = function (cb) {
-    form.addEventListener('click', ({ target }) => {
-      target = target.closest('.img-filters__button');
-      if (target === null) {
+  this.setFormListener = function (cb) {
+    formNode.addEventListener('click', ({ target }) => {
+      const targetNode = target.closest('.img-filters__button');
+      if (targetNode === null) {
         return;
       }
 
-      const isAcceptable = ACCEPTABLE_FILTERS.some(
-        (filter) => filter === target.dataset.photosFilter
-      );
-      const activeButton = isAcceptable ? target : buttons[0];
-
-      this.filter = isAcceptable
-        ? target.dataset.photosFilter
-        : ACCEPTABLE_FILTERS[0];
+      this.filter = targetNode.dataset.photosFilter;
       deactivateButtons();
-      setActiveButton(activeButton);
+      setActiveButton(targetNode);
       cb();
     });
   };
 })();
 
-export { filters };
+export { filters, ACCEPTABLE_FILTERS };
