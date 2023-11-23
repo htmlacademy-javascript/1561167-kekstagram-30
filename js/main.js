@@ -1,4 +1,4 @@
-const RENDERING_DELAY_TIME = 600;
+const RENDERING_DELAY_TIME = 660;
 
 import { renderingGallery } from './gallery.js';
 import { initializeImageUpload } from './image-upload.js';

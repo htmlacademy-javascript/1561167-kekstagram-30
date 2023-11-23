@@ -65,14 +65,17 @@ const formNode = document.querySelector('.img-upload__form');
 const effectLevelNode = formNode.querySelector('.img-upload__effect-level');
 const effectLevelFieldNode = formNode.querySelector('.effect-level__value');
 const sliderNode = formNode.querySelector('.effect-level__slider');
-const effectPreviewNode = formNode.querySelector('.img-upload__preview img');
-const effectsListNode = formNode.querySelector('.effects__list');
+const previewNode = formNode.querySelector('.img-upload__preview img');
+const listNode = formNode.querySelector('.effects__list');
 
-let effectType = '';
+let effectType = 'none';
 
-const getEffectOptionsByType = (value) => effectsOptions[value];
+const getOptionsByType = (value) => effectsOptions[value];
 
-const onEffectsFieldsClick = ({ target }) => {
+const updateSlider = ({ range: { min, max }, start, step }) =>
+  sliderNode.noUiSlider.updateOptions({ range: { min, max }, start, step });
+
+const onListClick = ({ target }) => {
   target = target.closest('.effects__radio');
 
   if (target === null || effectType === target.value) {
@@ -80,22 +83,16 @@ const onEffectsFieldsClick = ({ target }) => {
   }
 
   effectType = target.value;
-
-  const {
-    range: { min, max },
-    start,
-    step,
-  } = getEffectOptionsByType(effectType);
-  sliderNode.noUiSlider.updateOptions({ range: { min, max }, start, step });
+  updateSlider(getOptionsByType(effectType));
 };
 
-const onsliderNodeUpdate = () => {
-  const { filter, unit } = getEffectOptionsByType(effectType);
+const onSliderUpdate = () => {
+  const { filter, unit } = getOptionsByType(effectType);
   const effectLevel = sliderNode.noUiSlider.get();
 
   if (effectType === 'none') {
     effectLevelFieldNode.value = '';
-    effectPreviewNode.style.filter = '';
+    previewNode.style.filter = '';
     sliderNode.setAttribute('disabled', true);
     effectLevelNode.classList.add('hidden');
     return;
@@ -103,47 +100,43 @@ const onsliderNodeUpdate = () => {
   sliderNode.removeAttribute('disabled');
   effectLevelNode.classList.remove('hidden');
   effectLevelFieldNode.value = effectLevel;
-  effectPreviewNode.style.filter = `${filter}(${effectLevel}${unit})`;
+  previewNode.style.filter = `${filter}(${effectLevel}${unit})`;
 };
 
 const initializeImageEffect = () => {
-  const {
-    range: { min, max },
-    start,
-    step,
-  } = getEffectOptionsByType('none');
-
   effectType = 'none';
-  noUiSlider.create(sliderNode, {
-    range: {
-      min,
-      max,
-    },
-    start,
-    step,
-    connect: 'lower',
-    format: {
-      to: (value) => {
-        if (Number.isInteger(value)) {
-          return value.toFixed(0);
-        }
-        return value.toFixed(1);
-      },
-      from: (value) => parseFloat(value),
-    },
-  });
-
   sliderNode.setAttribute('disabled', true);
-  sliderNode.noUiSlider.on('update', onsliderNodeUpdate);
-
-  effectsListNode.addEventListener('click', onEffectsFieldsClick);
+  updateSlider(getOptionsByType(effectType));
+  listNode.addEventListener('click', onListClick);
 };
 
 const resetImageEffect = () => {
-  effectPreviewNode.style.filter = '';
+  previewNode.style.filter = '';
   effectLevelNode.classList.remove('hidden');
-  sliderNode.noUiSlider.destroy();
-  effectsListNode.removeEventListener('click', onEffectsFieldsClick);
+  listNode.removeEventListener('click', onListClick);
 };
+
+const {
+  range: { min: minRage, max: maxRange },
+  start: startValue,
+  step: stepValue,
+} = getOptionsByType(effectType);
+
+noUiSlider.create(sliderNode, {
+  range: { min: minRage, max: maxRange },
+  start: startValue,
+  step: stepValue,
+  connect: 'lower',
+  format: {
+    to: (value) => {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(1);
+    },
+    from: (value) => parseFloat(value),
+  },
+});
+sliderNode.noUiSlider.on('update', onSliderUpdate);
 
 export { initializeImageEffect, resetImageEffect };
