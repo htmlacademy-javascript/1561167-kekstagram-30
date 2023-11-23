@@ -1,13 +1,15 @@
 const TEMPLATE_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/;
 const MAXIMUM_QUANTITY_HASHTAGS = 5;
 const MAXIMUM_DESCRIPTION_LENGTH = 140;
-const ERROR_MESSAGE_UNVALID =
-  'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;';
-const ERROR_MESSAGE_MORE_LIMITED = 'можно указать не более 5 хэш-тегов;';
-const ERROR_MESSAGE_REPEATED = 'хэш-теги повторяются.';
-const ERROR_MESSAGE_LENGTH = `длина комментария больше ${MAXIMUM_DESCRIPTION_LENGTH} символов.`;
+const StatusMessage = {
+  INCORRECT:
+    'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;',
+  RESTRICTION: 'можно указать не более 5 хэш-тегов;',
+  REPEATED: 'хэш-теги повторяются.',
+  LENGTH: `длина комментария больше ${MAXIMUM_DESCRIPTION_LENGTH} символов.`,
+};
 
-let errorMessages = {};
+let errorMessage = {};
 
 const validateDescriptionField = (value) =>
   value.length >= 0 && value.length <= MAXIMUM_DESCRIPTION_LENGTH;
@@ -25,27 +27,28 @@ const validateHashtagField = (hashtags) => {
     normalizeHashtags.length > MAXIMUM_QUANTITY_HASHTAGS;
   const uniqueHashtags = new Set(normalizeHashtags);
   const isUniqueHashtags = normalizeHashtags.length === uniqueHashtags.size;
+  const { INCORRECT, RESTRICTION, REPEATED } = StatusMessage;
 
   if (!isValidHashtags) {
-    errorMessages.valid = ERROR_MESSAGE_UNVALID;
+    errorMessage.valid = INCORRECT;
   }
   if (isMoreLimitedHashtags) {
-    errorMessages.limited = ERROR_MESSAGE_MORE_LIMITED;
+    errorMessage.limited = RESTRICTION;
   }
   if (!isUniqueHashtags) {
-    errorMessages.repeated = ERROR_MESSAGE_REPEATED;
+    errorMessage.repeated = REPEATED;
   }
 
   return isValidHashtags && !isMoreLimitedHashtags && isUniqueHashtags;
 };
 
 const getHashtagValidationErrors = () => {
-  const message = Object.values(errorMessages).join(' ');
-  errorMessages = {};
+  const message = Object.values(errorMessage).join(' ');
+  errorMessage = {};
   return message;
 };
 
-const getDescriptionValidationErrors = () => ERROR_MESSAGE_LENGTH;
+const getDescriptionValidationErrors = () => StatusMessage.LENGTH;
 
 const initializeValidation = (
   validatedFormElement,
