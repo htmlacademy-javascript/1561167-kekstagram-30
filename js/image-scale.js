@@ -1,9 +1,9 @@
+import { CounterInRange } from './util.js';
+
 const MAXIMUM_IMAGE_SCALE = 100;
 const MINIMUM_IMAGE_SCALE = 25;
 const DEFAULT_VALUE_SCALE = 100;
 const STEP_IMAGE_SCALE = 25;
-
-import { CounterInRange } from './util.js';
 
 const formNode = document.querySelector('.img-upload__form');
 const scaleNode = formNode.querySelector('.img-upload__scale');

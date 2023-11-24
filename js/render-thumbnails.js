@@ -5,10 +5,10 @@ const getNode = createElementFromTemplate('#picture');
 
 const getThumbnailElement = ({ id, url, description, likes, comments }) => {
   const photoNode = getNode();
-  const imgNoge = photoNode.querySelector('.picture__img');
+  const imgNode = photoNode.querySelector('.picture__img');
 
-  imgNoge.src = url;
-  imgNoge.alt = description;
+  imgNode.src = url;
+  imgNode.alt = description;
   photoNode.querySelector('.picture__comments').textContent = comments.length;
   photoNode.querySelector('.picture__likes').textContent = likes;
   photoNode.dataset.thumbnailId = id;

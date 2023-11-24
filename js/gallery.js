@@ -8,7 +8,7 @@ const fullSizeModeCloseNode = document.querySelector('.big-picture__cancel');
 
 let dataPhotos = [];
 
-const renderingGallery = (photos) => {
+const renderGallery = (photos) => {
   dataPhotos = photos[filters.get()]();
 
   renderThumbnails(dataPhotos);
@@ -45,4 +45,4 @@ photosListNode.addEventListener('click', ({ target }) => {
   showFullSizeMode(photo);
 });
 
-export { renderingGallery };
+export { renderGallery };
