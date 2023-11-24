@@ -93,7 +93,7 @@ const onSliderUpdate = () => {
   if (effectType === 'none') {
     effectLevelFieldNode.value = '';
     previewNode.style.filter = '';
-    sliderNode.setAttribute('disabled', true);
+    sliderNode.setAttribute('disabled', 'true');
     effectLevelNode.classList.add('hidden');
     return;
   }
@@ -105,7 +105,7 @@ const onSliderUpdate = () => {
 
 const initializeImageEffect = () => {
   effectType = 'none';
-  sliderNode.setAttribute('disabled', true);
+  sliderNode.setAttribute('disabled', 'true');
   updateSlider(getOptionsByType(effectType));
   listNode.addEventListener('click', onListClick);
 };

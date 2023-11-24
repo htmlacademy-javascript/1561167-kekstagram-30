@@ -1,7 +1,7 @@
-const MAXIMUM_COUNT_COMMENTS_SHOWN = 5;
-
 import { toggleModalShow } from './util.js';
 import { renderComments } from './render-comments.js';
+
+const MAXIMUM_COUNT_COMMENTS_SHOWN = 5;
 
 const bigPictureNode = document.querySelector('.big-picture');
 const imageNode = bigPictureNode.querySelector('.big-picture__img img');

@@ -1,6 +1,6 @@
-const TIME_DELAY = 5000;
-
 import { createElementFromTemplate, isEscapeDown } from './util.js';
+
+const TIME_DELAY = 5000;
 
 const showLoadErrorMessage = () => {
   const messageNode = createElementFromTemplate('#data-error')();

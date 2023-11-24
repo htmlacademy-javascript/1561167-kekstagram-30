@@ -8,20 +8,6 @@ const toggleModalShow = (element, isModalOpen = true) => {
   document.body.classList[methodBody]('modal-open');
 };
 
-function CounterInRange({ range: { min, max }, start, step }) {
-  this.get = function () {
-    return start;
-  };
-  this.up = function () {
-    start = Math.min(start + step, max);
-    return start;
-  };
-  this.down = function () {
-    start = Math.max(start - step, min);
-    return start;
-  };
-}
-
 const replaceFirstCharacter = (string) => `.${string.slice(1, string.length)}`;
 
 const createElementFromTemplate = (selector, contentSelector = '') => {
@@ -56,14 +42,14 @@ const generateRandomUniqueNumber = (min, max) => {
 };
 
 const getRandomUniqueElements = (array, quantity) => {
-  const result = [];
+  const Elements = [];
   const getUniqueIndex = generateRandomUniqueNumber(0, array.length - 1);
 
   quantity = Math.min(quantity, array.length);
   for (let i = 0; i < quantity; i++) {
-    result.push(array[getUniqueIndex()]);
+    Elements.push(array[getUniqueIndex()]);
   }
-  return result;
+  return Elements;
 };
 
 const debounce = (callback, timeoutDelay = 500) => {
@@ -74,6 +60,21 @@ const debounce = (callback, timeoutDelay = 500) => {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 };
+
+// функция конструктор
+function CounterInRange({ range: { min, max }, start, step }) {
+  this.get = function () {
+    return start;
+  };
+  this.up = function () {
+    start = Math.min(start + step, max);
+    return start;
+  };
+  this.down = function () {
+    start = Math.max(start - step, min);
+    return start;
+  };
+}
 
 export {
   isEscapeDown,

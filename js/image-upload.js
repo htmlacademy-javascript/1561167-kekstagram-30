@@ -1,15 +1,15 @@
-const ACCEPTABLE_FILE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png'];
-const ButtonCaption = {
-  SEND: 'Публикую...',
-  PUBLISH: 'Опубликовать',
-};
-
 import { toggleModalShow, isEscapeDown } from './util.js';
 import { initializeValidation } from './validate-field.js';
 import { initializeImageScale, resetImageScale } from './image-scale.js';
 import { initializeImageEffect, resetImageEffect } from './image-effects.js';
 import { sendData } from './data.js';
 import { showErrorMessage, showSuccessMessage } from './message.js';
+
+const EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png'];
+const ButtonCaption = {
+  SEND: 'Публикую...',
+  PUBLISH: 'Опубликовать',
+};
 
 const formNode = document.querySelector('.img-upload__form');
 const uploadField = formNode.querySelector('.img-upload__input');
@@ -78,15 +78,11 @@ const onUploadFormSubmit = (evt) => {
 const onUploadFormShow = () => {
   const file = uploadField.files[0];
   const fileName = file.name.toLowerCase();
-  const isAcceptable = ACCEPTABLE_FILE_EXTENSIONS.some((item) =>
-    fileName.endsWith(item)
-  );
+  const isAcceptable = EXTENSIONS.some((item) => fileName.endsWith(item));
 
   if (!isAcceptable) {
     showErrorMessage(
-      `Ошибка! Выбери файл с расширением ${ACCEPTABLE_FILE_EXTENSIONS.join(
-        ', '
-      )}`
+      `Ошибка! Выбери файл с расширением ${EXTENSIONS.join(', ')}`
     );
     return;
   }

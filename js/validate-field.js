@@ -3,7 +3,7 @@ const MAXIMUM_QUANTITY_HASHTAGS = 5;
 const MAXIMUM_DESCRIPTION_LENGTH = 140;
 const StatusMessage = {
   INCORRECT:
-    'хэш-тег должен начинаеться с #, быть длинной до 20 символов и состоять из букв и цифр;',
+    'хэш-тег должен начинаться с #, быть длинной до 20 символов и состоять из букв и цифр;',
   RESTRICTION: 'можно указать не более 5 хэш-тегов;',
   REPEATED: 'хэш-теги повторяются.',
   LENGTH: `длина комментария больше ${MAXIMUM_DESCRIPTION_LENGTH} символов.`,

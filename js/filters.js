@@ -1,4 +1,4 @@
-const ACCEPTABLE_FILTERS = ['default', 'random', 'likes'];
+const METHODS = ['default', 'random', 'likes'];
 
 const sectionNode = document.querySelector('.img-filters');
 const formNode = sectionNode.querySelector('.img-filters__form');
@@ -21,14 +21,14 @@ const deactivateButtons = () =>
 const filters = new (function () {
   this.initialize = function () {
     [...buttonsNodes].forEach((button, index) => {
-      button.dataset.photosFilter = ACCEPTABLE_FILTERS[index];
+      button.dataset.photosFilter = METHODS[index];
       if (isActiveButton(button)) {
-        this.filter = ACCEPTABLE_FILTERS[index];
+        this.filter = METHODS[index];
       }
     });
     if (this.filter === undefined) {
       setActiveButton(buttonsNodes[0]);
-      this.filter = ACCEPTABLE_FILTERS[0];
+      this.filter = METHODS[0];
     }
     showFiltersSection();
   };
@@ -50,4 +50,4 @@ const filters = new (function () {
   };
 })();
 
-export { filters, ACCEPTABLE_FILTERS };
+export { filters, METHODS };
